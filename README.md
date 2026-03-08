@@ -1,14 +1,25 @@
-# Hommie — Student Housing Platform
+# Student Housing Finder Platform
 
 ## About
-A web-based platform that helps students find shared housing 
-and compatible roommates.
+Student Housing Finder is a web-based platform designed to help university students find suitable accommodation and compatible roommates. The system provides a centralized place where students can post housing listings and browse available rooms near their university, making the housing search process simpler and more organized.
 
-## Tech Stack
+## Features
+- **User Authentication**  
+  Students can securely register and log in to the platform to access housing listings.
+- **Listing Management**  
+  Users can create, edit, and delete their own housing listings.
+- **Browse & Search**  
+  Students can browse available listings and filter them based on criteria such as location and price.
+- **Detailed Views**  
+  Each listing provides detailed information including description, price, location, and contact details.
+- **User Preferences**  
+  Users can specify preferences for potential roommates or housing requirements.
+  
+ ## Tech Stack
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js + Express
 - Database: MySQL
-
+  
 ## Team Members
 - Tabarak Alsheikh
 - Roughaya Eldado
@@ -16,9 +27,3 @@ and compatible roommates.
 - Najwa Noor
 - Rumeysa Elif Cikar
 
-## Features
-- User registration and login
-- Post housing listings
-- Browse and search listings
-- View listing details
-- Roommate preferences
