@@ -1,3 +1,4 @@
+#Roommie
 # Student Housing Finder Platform
 
 ## About
@@ -25,5 +26,5 @@ Student Housing Finder is a web-based platform designed to help university stude
 - Roughaya Eldado
 - Rayan Nouh Saed
 - Najwa Noor
-- Rumeysa Elif Cikar
+- Rumeysa Elif Çakır
 
