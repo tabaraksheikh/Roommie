@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Listing</title>
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/post-listing.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">Roommie</div>
+    <nav>
+      <a href="main.html">Home</a>
+      <a href="post-listing.html">Post Listing</a>
+      <a href="profile.html">Profile</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main class="post-listing-page">
+    <div class="form-container">
+      <h1>Create a Listing</h1>
+
+      <form>
+        <div class="form-group">
+          <label for="title">Listing Title</label>
+          <input type="text" id="title" placeholder="Enter listing title" />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" placeholder="Enter location" />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="text" id="price" placeholder="Enter monthly rent" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" rows="5" placeholder="Write about the room/apartment"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="image">Upload Image</label>
+          <input type="file" id="image" />
+        </div>
+
+        <button type="submit">Post Listing</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
