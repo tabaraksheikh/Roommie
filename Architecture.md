@@ -1,7 +1,6 @@
-## Roommie
-## Change History
-## Table of Contents
-## List of Figures
+## Roommie – Student Housing Finder Platform
+
+
 
 ## 1. Scope
 
