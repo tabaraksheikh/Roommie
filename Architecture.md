@@ -1,5 +1,4 @@
-# Title Page
-
+Roommie
 ## Change History
 ## Table of Contents
 ## List of Figures
@@ -13,6 +12,7 @@ The project focuses on core features such as user registration, listing manageme
 Advanced features such as online payments, identity verification, and integration with external services are out of the scope of this project, as the goal is to keep the system simple and focused.
 
 ## 2. References
+
 ## 3. Software Architecture
 The system is designed using a layered structure that separates the user interface, application logic, and data storage. This makes the application easier to organize, develop, and maintain.
 
