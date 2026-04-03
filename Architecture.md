@@ -135,6 +135,11 @@ The logical architecture supports separation of concerns and reduces duplication
 
 The layered class diagram is placed in this section because it shows the main logical components of the system and the relationships between controllers, services, models, entities, and supporting utilities.
 
+## Layered Class Diagram
+
+![Roommie Layered Class Diagram](./docs/images/Roommie-layered-Class-diagram.svg)
+
+
 ## 6. Process Architecture
 ## 7. Development Architecture
 ## 8. Physical Architecture
