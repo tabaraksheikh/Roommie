@@ -140,13 +140,12 @@ The layered class diagram is placed in this section because it shows the main lo
 
 ## 6. Process Architecture
 
-Activity Diagram:
-An activity diagram shows the step-by-step flow of actions in a system process. It helps illustrate how a task starts, what decisions are made during execution, and how the process ends. Here are two examples of activity diagrams in Roommie: User Registration with OTP and Post Listing.
-## Activity Diagrams
+
+### Activity Diagrams
 
 An activity diagram shows the step-by-step flow of actions in a system process. It helps illustrate how a task starts, what decisions are made during execution, and how the process ends. Here are two examples of activity diagrams in Roommie: Post Listing and User Registration with OTP.
 
-### Post Listing Activity Diagram
+#### Post Listing Activity Diagram
 
 ```mermaid
 flowchart LR
