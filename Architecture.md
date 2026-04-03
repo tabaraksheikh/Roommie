@@ -309,10 +309,59 @@ persistence consistency between these 5 scenario none of them are same right
 
 
 ## 10. Size and Performance
+
+Roommie is designed for a small-to-medium academic project scale. The system is expected to support a moderate number of users and listings while remaining simple, maintainable, and efficient.
+
+### Expected Size
+- moderate number of registered users
+- moderate number of active listings
+- small reference datasets for cities, districts, and amenities
+- limited number of images per listing
+
+### Performance Characteristics
+- listing search and filtering are handled through structured backend queries
+- pagination reduces the amount of data loaded at one time
+- normalized reference tables reduce redundancy and improve consistency
+- images are stored in the filesystem instead of the database to keep database queries lighter
+- OTP operations are lightweight and short-lived
+
+### Limitations
+- no caching layer
+- no load balancing
+- no distributed file storage
+- no asynchronous job queue
+- single-server assumptions
+
+These tradeoffs are acceptable for the current project scope.
 ## 11. Quality
 
 ## Appendices
 
 ### Acronyms and Abbreviations
+- OTP: One-Time Password
+- JWT: JSON Web Token
+- MVC: Model-View-Controller
+- API: Application Programming Interface
+- SMTP: Simple Mail Transfer Protocol
+- DB: Database
+
 ### Definitions
+- Listing: A room advertisement posted by a user
+- Poster: The user who created a listing
+- Saved Room: A listing bookmarked by a user
+- Reference Data: Shared lookup data such as cities, districts, and amenities
+- OTP Request: A temporary verification record used during signup, password reset, or email change
+- Authentication: The process of verifying the identity of a user
+- Authorization: The process of checking whether a user has permission to perform an action
+
 ### Design Principles
+- Separation of Concerns
+- Layered Architecture
+- Single Responsibility Principle
+- Low Coupling
+- High Cohesion
+- Normalized Data Design
+- Simplicity over unnecessary complexity
+
+
+
