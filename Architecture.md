@@ -137,8 +137,6 @@ The layered class diagram is placed in this section because it shows the main lo
 
 ## Layered Class Diagram
 
-![Roommie Layered Class Diagram](./docs/images/Roommie-layered-Class-diagram.svg)
-
 
 ## 6. Process Architecture
 ## 7. Development Architecture
