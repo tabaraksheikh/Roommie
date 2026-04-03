@@ -142,6 +142,45 @@ The layered class diagram is placed in this section because it shows the main lo
 
 Activity Diagram:
 An activity diagram shows the step-by-step flow of actions in a system process. It helps illustrate how a task starts, what decisions are made during execution, and how the process ends. Here are two examples of activity diagrams in Roommie: User Registration with OTP and Post Listing.
+## Activity Diagrams
+
+An activity diagram shows the step-by-step flow of actions in a system process. It helps illustrate how a task starts, what decisions are made during execution, and how the process ends. Here are two examples of activity diagrams in Roommie: Post Listing and User Registration with OTP.
+
+### Post Listing Activity Diagram
+
+```mermaid
+flowchart LR
+    Start([Open Post Listing page]) --> Logged{Logged in?}
+
+    Logged -- NO --> ShowLogin[Show login/signup]
+    ShowLogin --> Continue[Continue]
+    Continue --> Login[Log in or sign up]
+    Login --> Return[Return]
+
+    Logged -- YES --> FillForm[Fill listing form]
+    FillForm --> Submit[Submit]
+    Submit --> FormValid{Form valid?}
+
+    FormValid -- NO --> ShowValidationErrors[Show validation errors]
+    ShowValidationErrors --> BackToForm1[Back to form]
+    BackToForm1 --> FillForm
+
+    FormValid -- YES --> SendToServer[Send data to server]
+    SendToServer --> Save[Save]
+
+    Save --> SaveSuccess{Save successful?}
+    SaveSuccess -- NO --> ShowSaveError[Show save error]
+    ShowSaveError --> BackToForm2[Back to form]
+    BackToForm2 --> FillForm
+
+    SaveSuccess -- YES --> StoreInDB[Store in database]
+    StoreInDB --> Respond[Respond]
+    Respond --> ReturnSuccess[Return success response]
+    ReturnSuccess --> Show[Show]
+    Show --> ShowSuccessMsg[Show success message]
+    ShowSuccessMsg --> Redirect[Redirect]
+    Redirect --> RedirectToListings[Redirect to My Listings]
+    RedirectToListings --> End([End])
 
 
 
