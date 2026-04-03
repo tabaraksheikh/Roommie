@@ -142,6 +142,94 @@ The layered class diagram is placed in this section because it shows the main lo
 ## 7. Development Architecture
 ## 8. Physical Architecture
 ## 9. Scenarios
+
+### Scenario 1: User Registration with OTP
+User enters signup information.
+Frontend sends registration request.
+Backend generates OTP and stores it in otp_requests.
+Backend sends OTP email.
+User submits the OTP.
+Backend verifies the OTP.
+User account is created in users.
+JWT token is returned.
+
+This validates:
+authentication
+OTP subsystem
+email service
+persistence
+
+### Scenario 2: Profile Update
+Authenticated user opens the profile page.
+Frontend requests the current user profile.
+Backend validates the JWT token.
+Backend retrieves the user from the database.
+Frontend fills the profile form with stored data.
+User edits profile fields such as name, gender, or bio.
+Frontend sends the updated profile data to the backend.
+Backend validates and saves the updated fields.
+Updated profile data is returned and shown in the UI.
+
+This validates:
+user management
+protected routes
+profile retrieval and update
+persistence consistency
+
+### Scenario 3: Room Request
+User browses available listings.
+User opens a listing they are interested in.
+Frontend displays room details, preferences, and poster contact information.
+User decides to reserve or request the room.
+Instead of an internal booking system, the platform directs the user to contact the poster through WhatsApp or the provided contact method.
+User sends a message expressing interest in the room.
+Poster reviews the request externally and decides whether the room is still available.
+If both sides agree, the reservation is handled outside the platform.
+The listing may later be removed or updated by the poster if the room is no longer available.
+
+This validates:
+listing retrieval
+poster profile and contact flow
+simple user decision flow
+system scope constraint with no internal reservation module
+
+### Scenario 4: Browse and Filter Listings
+User opens browse page.
+User selects filters and enters search text.
+Frontend sends filter parameters to backend.
+Backend returns matching listings with pagination.
+Frontend renders cards and navigation controls.
+This validates:
+
+search and filtering
+listing retrieval
+frontend-backend interaction
+
+
+### Scenario 5 : Posting a Listing
+Authenticated user opens the post listing page.
+Frontend loads reference data such as cities, districts, and amenities.
+User enters room details, price, preferences, description, and contact information.
+User selects one or more images for the listing.
+Frontend validates required fields before submission.
+Frontend sends the listing data and images to the backend.
+Backend verifies the JWT token and confirms the user is authenticated.
+Backend validates and normalizes the listing data.
+Upload middleware stores image files in the uploads folder.
+Backend inserts the listing into listings.
+Backend inserts related image records into listing_images.
+Backend inserts selected amenities into listing_amenities.
+Backend returns the created listing response.
+Frontend shows success feedback and the listing becomes visible in browse results.
+This validates:
+
+authentication
+listing management
+image management
+reference data usage
+persistence consistency between these 5 scenario none of them are same right
+
+
 ## 10. Size and Performance
 ## 11. Quality
 
