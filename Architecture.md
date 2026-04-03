@@ -37,36 +37,104 @@ No internal messaging system (external apps are used)
 No integration with payment systems or external APIs
 Focus on core features only (listings, search, profiles)
 ## 5. Logical Architecture
-The logical architecture describes the main functional components of Roommie system and how responsibilities are distributed between them. It focuses on the system’s key abstractions and their relationships, independent of implementation details.
+The logical architecture describes the main functional components of Roommie and how responsibilities are distributed between them. It focuses on major abstractions rather than implementation details.
 
-The Roommie system follows a layered architecture based on the Model–View–Controller (MVC) pattern, where the system is organized into logical components that separate user interaction, application logic, and data management.
+Roommie follows a layered architecture with MVC-style separation in the backend.
 
-The system is composed of the following main logical components:
+The main logical components are:
 
-User Management
-Handles user-related operations such as registration, login, profile management, and account deletion. It is responsible for maintaining user information and enforcing authentication rules.
+### User Management
 
-Listing Management
-Manages all operations related to room listings. This includes creating, updating, deleting, and retrieving listings. It also handles listing details such as title, location, price, images, and contact information.
+Handles:
+- account registration
+- login
+- password change
+- password reset
+- email change
+- account deletion
+- profile update and retrieval
 
-Search and Filtering
-Responsible for retrieving listings based on user-defined criteria such as city, district, price range, room type, amenities, and roommate preferences. It ensures that users can efficiently find suitable listings.
+This component manages user identity and account state.
 
-Amenities and Preferences Management
-Handles predefined lists of amenities and roommate preferences. These components ensure consistency in how listings are described and filtered across the system.
+### OTP Verification System
 
-Saved Rooms Management
-Allows users to save and manage favorite listings. It ensures that users can store and access preferred listings without duplication.
+Handles:
+- OTP generation
+- OTP storage
+- OTP verification
+- OTP expiration
+- one-time usage of verification codes
 
-OTP Verification System
-Manages the generation and verification of one-time passwords (OTP) used for email verification, password reset, and account updates. It ensures security by enforcing expiration and validation rules.
+OTP is used for:
+- account registration
+- password reset
+- email change confirmation
 
-Image Management
-Handles the storage and retrieval of listing images. Each listing can contain multiple images, with a defined maximum limit.
+Unverified users are not stored in the `users` table until OTP verification succeeds.
 
-These components interact to support the main system functionalities. For example, when a user creates a listing, the listing management component coordinates with image management, preferences management, and user management to store all required information.
+### Listing Management
 
-The logical architecture ensures a clear separation of responsibilities, making the system easier to understand, maintain, and extend. It also supports scalability by allowing each component to evolve independently without affecting the overall system structure.
+Handles:
+- creating listings
+- editing listings
+- deleting listings
+- retrieving listing details
+- associating listings with a user
+- validating contact and room information
+
+Listing data includes room type, description, location, price, preferences, images, and contact information.
+
+### Search and Filtering
+
+Handles:
+- browsing listings
+- searching by title or location
+- filtering by city, district, room type, amenities, maximum price, roommate count, gender preference, smoking preference, pets, and environment
+
+This component supports efficient discovery of suitable rooms.
+
+### Saved Rooms Management
+
+Handles:
+- saving listings
+- unsaving listings
+- retrieving saved listings
+- preventing duplicate saved entries
+
+### Reference Data Management
+
+Handles system-wide lookup data such as:
+- cities
+- districts
+- amenities
+
+This ensures consistency across listing creation, filtering, and display.
+
+### Image Management
+
+Handles:
+- receiving uploaded images
+- storing them on the server filesystem
+- linking image paths to listings
+- deleting removed or replaced files
+
+### Persistence Layer
+
+Stores all structured system data in MySQL using normalized tables:
+- users
+- listings
+- listing_images
+- saved_rooms
+- otp_requests
+- cities
+- districts
+- amenities
+- listing_amenities
+
+The logical architecture supports separation of concerns and reduces duplication between components.
+
+The layered class diagram is placed in this section because it shows the main logical components of the system and the relationships between controllers, services, models, entities, and supporting utilities.
+
 ## 6. Process Architecture
 ## 7. Development Architecture
 ## 8. Physical Architecture
