@@ -139,6 +139,71 @@ The layered class diagram is placed in this section because it shows the main lo
 
 
 ## 6. Process Architecture
+
+Activity Diagram:
+An activity diagram shows the step-by-step flow of actions in a system process. It helps illustrate how a task starts, what decisions are made during execution, and how the process ends. Here are two examples of activity diagrams in Roommie: User Registration with OTP and Post Listing.
+
+flowchart LR
+    Start([Open Post Listing page]) --> Logged{Logged in?}
+    
+    Logged -- NO --> ShowLogin[Show login/signup]
+    ShowLogin --> Continue[Continue]
+    Continue --> Login[Log in or sign up]
+    Login --> Return[Return]
+    
+    Logged -- YES --> FillForm[Fill listing form]
+    FillForm --> Submit[Submit]
+    Submit --> FormValid{Form valid?}
+    
+    FormValid -- NO --> ShowValidationErrors[Show validation errors]
+    ShowValidationErrors --> BackToForm1[Back to form]
+    BackToForm1 --> FillForm
+    
+    FormValid -- YES --> SendToServer[Send data to server]
+    SendToServer --> Save[Save]
+    
+    Save --> SaveSuccess{Save successful?}
+    SaveSuccess -- NO --> ShowSaveError[Show save error]
+    ShowSaveError --> BackToForm2[Back to form]
+    BackToForm2 --> FillForm
+    
+    SaveSuccess -- YES --> StoreInDB[Store in database]
+    StoreInDB --> Respond[Respond]
+    Respond --> ReturnSuccess[Return success response]
+    ReturnSuccess --> Show[Show]
+    Show --> ShowSuccessMsg[Show success message]
+    ShowSuccessMsg --> Redirect[Redirect]
+    Redirect --> RedirectToListings[Redirect to My Listings]
+    RedirectToListings --> End([End])
+
+flowchart TD
+    A([Start]) --> B[User enters signup information]
+    B --> C[Frontend sends registration request]
+    C --> D[Backend validates signup data]
+
+    D --> E{Is signup data valid?}
+    E -- No --> F[Return validation error]
+    F --> Z([End])
+
+    E -- Yes --> G[Backend generates OTP]
+    G --> H[Store OTP in otp_requests]
+    H --> I[Send OTP email to user]
+    I --> J[User enters received OTP]
+    J --> K[Frontend sends OTP verification request]
+    K --> L[Backend checks OTP validity and expiration]
+
+    L --> M{Is OTP valid?}
+    M -- No --> N[Return invalid or expired OTP error]
+    N --> J
+
+    M -- Yes --> O[Create user in users]
+    O --> P[Generate JWT token]
+    P --> Q[Return token and user data]
+    Q --> R[Frontend logs user in]
+    R --> Z([End])
+
+
+
 ## 7. Development Architecture
 ## 8. Physical Architecture
 ## 9. Scenarios
