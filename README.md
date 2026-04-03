@@ -18,4 +18,4 @@ Roommie solves this by providing a centralized space where students who have a s
 
 ## Architecture Link
 
-[Architecture Documentation](./architecture.md)
+[Architecture Documentation](./Architecture.md)
