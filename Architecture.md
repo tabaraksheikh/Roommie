@@ -542,7 +542,46 @@ Roommie is designed for a small-to-medium academic project scale. The system is 
 - single-server assumptions
 
 These tradeoffs are acceptable for the current project scope.
+
 ## 11. Quality
+
+### Maintainability
+
+The system uses a layered backend and grouped frontend modules, which makes responsibilities clearer and reduces duplication.
+
+### Modifiability
+
+New filters, profile fields, and listing features can be added with limited impact on unrelated modules.
+
+### Usability
+
+The system provides direct page-based flows for:
+- signup
+- login
+- browse
+- post listing
+- edit listing
+- save listing
+- manage profile
+
+### Security
+
+Security mechanisms include:
+- password hashing with bcrypt
+- JWT-based authentication
+- OTP verification for sensitive flows
+- route protection for authenticated actions
+- server-side validation
+- parameterized SQL queries
+
+### Reliability
+
+The system uses structured validation, normalized persistence, image cleanup logic, and automated tests for important service flows.
+
+### Simplicity
+
+The architecture avoids unnecessary systems such as chat, payments, and advanced external integration, keeping the design suitable for a student project.
+
 
 ## 12. Appendices
 
