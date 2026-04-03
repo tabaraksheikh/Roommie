@@ -181,10 +181,10 @@ flowchart LR
     Redirect --> RedirectToListings[Redirect to My Listings]
     RedirectToListings --> End([End])
 ```
-### ---------
+
 This activity diagram shows the process of creating a new listing. It includes checking whether the user is logged in, filling and validating the form, sending the data to the backend, saving the listing, and showing a success response.
 
-### User Registration with OTP Activity Diagram
+#### User Registration with OTP Activity Diagram
 
 ```mermaid
 flowchart TD
@@ -213,7 +213,7 @@ flowchart TD
     Q --> R[Frontend logs user in]
     R --> Z([End])
 ```
-### ---------
+
 This activity diagram shows the process of registering a new user account with email verification. It includes signup validation, OTP generation, email sending, OTP verification, and final account creation.
 
 ## 7. Development Architecture
