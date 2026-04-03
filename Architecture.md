@@ -180,7 +180,8 @@ flowchart LR
     Show --> ShowSuccessMsg[Show success message]
     ShowSuccessMsg --> Redirect[Redirect]
     Redirect --> RedirectToListings[Redirect to My Listings]
-    RedirectToListings --> End([End])
+```md
+RedirectToListings --> End([End])
 
 
 
