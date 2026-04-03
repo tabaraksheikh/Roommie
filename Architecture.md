@@ -136,7 +136,215 @@ The logical architecture supports separation of concerns and reduces duplication
 The layered class diagram is placed in this section because it shows the main logical components of the system and the relationships between controllers, services, models, entities, and supporting utilities.
 
 ## Layered Class Diagram
+The following layered class diagram presents the main structural elements of Roommie and the relationships between controllers, services, models, entities, and utility components. It shows how responsibilities are separated across the backend architecture and how the major system components interact.
 
+```mermaid
+classDiagram
+  direction TB
+
+  namespace Entities {
+    class User["User <<entity>>"] {
+      -id : int
+      -email : string
+      -password : string
+      -first_name : string
+      -last_name : string
+      -gender : string
+      -bio : string
+    }
+    class Listing["Listing <<entity>>"] {
+      -id : int
+      -user_id : int
+      -city_id : int
+      -district_id : int
+      -title : string
+      -type : string
+      -price : decimal
+      -phone : string
+      -imageUrls : string[]
+      -created_at : datetime
+    }
+    class SavedRoom["SavedRoom <<entity>>"] {
+      -id : int
+      -user_id : int
+      -listing_id : int
+      -created_at : datetime
+    }
+    class OTPRequest["OTPRequest <<entity>>"] {
+      -id : int
+      -email : string
+      -purpose : string
+      -otp_code : string
+      -expires_at : datetime
+      -used_at : datetime
+    }
+    class City["City <<entity>>"] {
+      -id : int
+      -name : string
+      -slug : string
+      -plate_code : string
+    }
+    class District["District <<entity>>"] {
+      -id : int
+      -city_id : int
+      -name : string
+      -slug : string
+    }
+    class Amenity["Amenity <<entity>>"] {
+      -id : int
+      -name : string
+      -slug : string
+    }
+  }
+
+  namespace Models {
+    class UserModel["UserModel <<model>>"] {
+      +findById(id)
+      +findByIdWithPassword(id)
+      +findByEmail(email)
+      +createUser(data)
+      +updateUser(id, data)
+      +updateEmail(id, email)
+      +updatePassword(id, hash)
+      +deleteUser(id)
+    }
+    class ListingModel["ListingModel <<model>>"] {
+      +findById(id)
+      +findRawById(id)
+      +findAll(filters, limit, offset)
+      +findFeatured()
+      +createListing(data)
+      +updateListing(id, data)
+      +deleteListing(id)
+      +resolveLocationRefs(location)
+      +syncListingAmenities(id, amenities)
+    }
+    class SavedModel["SavedModel <<model>>"] {
+      +findAllByUser(userId)
+      +isSaved(userId, listingId)
+      +saveListing(userId, listingId)
+      +unsaveListing(userId, listingId)
+    }
+    class OtpModel["OtpModel <<model>>"] {
+      +replacePendingOtp(data)
+      +findLatestPendingOtp(email, purpose)
+      +markOtpUsed(id)
+    }
+  }
+
+  namespace Services {
+    class AuthService["AuthService <<service>>"] {
+      +register(data)
+      +login(data)
+      +changePassword(userId, data)
+      +resetPassword(userId, newPassword)
+      +changeEmail(userId, newEmail)
+      +deleteAccount(userId)
+    }
+    class UsersService["UsersService <<service>>"] {
+      +getMe(userId)
+      +updateMe(userId, data)
+      +getUserById(userId)
+    }
+    class ListingsService["ListingsService <<service>>"] {
+      +getListings(query)
+      +getFeatured()
+      +getListingById(id)
+      +createListing(userId, body, imageUrls)
+      +updateListing(listingId, userId, body, imageFiles)
+      +deleteListing(listingId, userId)
+    }
+    class SavedService["SavedService <<service>>"] {
+      +getSavedListings(userId)
+      +checkSaved(userId, listingId)
+      +saveListing(userId, listingId)
+      +unsaveListing(userId, listingId)
+    }
+    class OtpStore["OtpStore <<service>>"] {
+      +saveOtp(email, purpose, payload)
+      +verifyOtp(email, purpose, code)
+    }
+    class EmailService["EmailService <<service>>"] {
+      +sendOtpEmail(toEmail, otp, type)
+    }
+  }
+
+  namespace Controllers {
+    class AuthController["AuthController <<controller>>"] {
+      +sendVerification(req, res)
+      +verifyEmail(req, res)
+      +login(req, res)
+      +getMe(req, res)
+      +changePassword(req, res)
+      +requestEmailChange(req, res)
+      +confirmEmailChange(req, res)
+      +requestPasswordReset(req, res)
+      +resetPassword(req, res)
+      +deleteAccount(req, res)
+    }
+    class ListingsController["ListingsController <<controller>>"] {
+      +getListings(req, res)
+      +getFeatured(req, res)
+      +getListingById(req, res)
+      +createListing(req, res)
+      +updateListing(req, res)
+      +deleteListing(req, res)
+    }
+    class UsersController["UsersController <<controller>>"] {
+      +getMe(req, res)
+      +updateMe(req, res)
+      +getUserById(req, res)
+    }
+    class SavedController["SavedController <<controller>>"] {
+      +getSavedListings(req, res)
+      +checkSaved(req, res)
+      +saveListing(req, res)
+      +unsaveListing(req, res)
+    }
+  }
+
+  namespace Utilities {
+    class PriceUtil["PriceUtil <<utility>>"] {
+      +parseDecimalPrice(value)
+    }
+    class UploadCleanup["UploadCleanup <<utility>>"] {
+      +deleteUploadFiles(imageUrls)
+      +resolveUploadPath(imageUrl)
+    }
+  }
+
+  User "1" --> "0..*" Listing : owns
+  User "1" --> "0..*" SavedRoom : saves
+  SavedRoom "0..*" --> "1" Listing : references
+  City "1" --> "0..*" District : contains
+  Listing "0..*" --> "0..1" City : located in
+  Listing "0..*" --> "0..1" District : located in
+  Listing "0..*" --> "0..*" Amenity : has
+
+  UserModel ..> User : reads/writes
+  ListingModel ..> Listing : reads/writes
+  SavedModel ..> SavedRoom : reads/writes
+  OtpModel ..> OTPRequest : reads/writes
+
+  AuthService --> UserModel : uses
+  AuthService --> OtpStore : uses
+  AuthService --> EmailService : triggers
+  UsersService --> UserModel : uses
+  ListingsService --> ListingModel : uses
+  ListingsService --> UploadCleanup : uses
+  SavedService --> SavedModel : uses
+  SavedService --> ListingModel : validates existence
+  OtpStore --> OtpModel : uses
+
+  AuthController --> AuthService : delegates to
+  ListingsController --> ListingsService : delegates to
+  UsersController --> UsersService : delegates to
+  SavedController --> SavedService : delegates to
+
+  ListingsService --> PriceUtil : validates price
+  ListingModel --> PriceUtil : normalizes price
+
+The diagram reflects Roommie’s layered design. Controllers handle HTTP requests, services contain business logic, models manage database access, entities represent the main stored data objects, and utilities provide shared support functions such as price parsing and upload cleanup.
 
 ## 6. Process Architecture
 
