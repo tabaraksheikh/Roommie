@@ -335,7 +335,7 @@ Roommie is designed for a small-to-medium academic project scale. The system is 
 These tradeoffs are acceptable for the current project scope.
 ## 11. Quality
 
-## Appendices
+## 12. Appendices
 
 ### Acronyms and Abbreviations
 - OTP: One-Time Password
