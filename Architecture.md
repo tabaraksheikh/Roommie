@@ -183,6 +183,36 @@ flowchart LR
     RedirectToListings --> End([End])
 ```
 
+### User Registration with OTP Activity Diagram
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[User enters signup information]
+    B --> C[Frontend sends registration request]
+    C --> D[Backend validates signup data]
+
+    D --> E{Is signup data valid?}
+    E -- No --> F[Return validation error]
+    F --> Z([End])
+
+    E -- Yes --> G[Backend generates OTP]
+    G --> H[Store OTP in otp_requests]
+    H --> I[Send OTP email to user]
+    I --> J[User enters received OTP]
+    J --> K[Frontend sends OTP verification request]
+    K --> L[Backend checks OTP validity and expiration]
+
+    L --> M{Is OTP valid?}
+    M -- No --> N[Return invalid or expired OTP error]
+    N --> J
+
+    M -- Yes --> O[Create user in users]
+    O --> P[Generate JWT token]
+    P --> Q[Return token and user data]
+    Q --> R[Frontend logs user in]
+    R --> Z([End])
+```
+
 
 
 ## 7. Development Architecture
