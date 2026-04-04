@@ -427,7 +427,118 @@ flowchart TD
 This activity diagram shows the process of registering a new user account with email verification. It includes signup validation, OTP generation, email sending, OTP verification, and final account creation.
 
 ## 7. Development Architecture
+The development architecture of the Roommie system follows a layered structure consisting of Presentation, Application, Business, and Data layers. Each layer is responsible for a specific concern and interacts only with adjacent layers to maintain low coupling and high cohesion. The diagram below illustrates the organization of modules and their dependencies within the system.
+flowchart TB
+
+%% PRESENTATION
+subgraph Presentation_Layer["Presentation Layer"]
+    FP["frontend/pages"]
+    FS["frontend/scripts"]
+
+    FAPI["scripts/api"]
+    FAUTH["scripts/auth"]
+    FLAYOUT["scripts/layout"]
+    FLIST["scripts/listing"]
+    FPAGE["scripts/pages"]
+    FUSER["scripts/user"]
+
+    FSTY["frontend/styles"]
+    FSHARED["styles/shared"]
+    FHOME["styles/home"]
+    FLSTY["styles/listing"]
+    FUSTY["styles/user"]
+
+    FIMG["frontend/images"]
+
+    FP --> FS
+
+    %% group script dependencies neatly
+    FS --> FAPI
+    FS --> FAUTH
+    FS --> FLAYOUT
+    FS --> FLIST
+    FS --> FPAGE
+    FS --> FUSER
+
+    %% group styles neatly
+    FSTY --> FSHARED
+    FSTY --> FHOME
+    FSTY --> FLSTY
+    FSTY --> FUSTY
+end
+
+%% APPLICATION
+subgraph Application_Layer["Application Layer"]
+    BR["backend/routes"]
+    BM["backend/middlewares"]
+    BC["backend/controllers"]
+
+    BR --> BM
+    BR --> BC
+end
+
+%% BUSINESS
+subgraph Business_Layer["Business Layer"]
+    BS["backend/services"]
+    BDL["backend/domains/listing"]
+    BU["backend/utils"]
+    BUP["backend/uploads"]
+
+    BS --> BDL
+    BS --> BU
+    BS --> BMO
+    BS --> BUP
+end
+
+%% DATA
+subgraph Data_Layer["Data Layer"]
+    BMO["backend/models"]
+    BCFG["backend/config"]
+    BDB["backend/database"]
+
+    BSCHEMA["database/schema"]
+    BREF["database/reference-data"]
+    BSETUP["database/setup"]
+
+    BMO --> BU
+    BMO --> BCFG
+    BMO --> BDB
+
+    BDB --> BSCHEMA
+    BDB --> BREF
+    BDB --> BSETUP
+end
+
+%% SUPPORT
+subgraph Support["Project Support"]
+    RS["scripts"]
+    RT["tests"]
+
+    RS --> BSETUP
+    RS --> BCFG
+    RT --> BS
+    RT --> BU
+end
+
+%% MAIN FLOW (kept at bottom for clean routing)
+FP --> BR
+FS --> BR
+BC --> BS
+
+The Presentation Layer contains the frontend components responsible for user interaction, including pages, scripts, styles, and images. The scripts module handles client-side logic and communicates with the backend through API calls.
+
+The Application Layer includes routes, controllers, and middlewares. Routes define the system endpoints, middlewares handle request validation and authentication, and controllers coordinate incoming requests by invoking the appropriate business logic.
+
+The Business Layer contains the core logic of the system. The services module implements application-level operations such as email and OTP handling, while the listing domain module encapsulates listing-related functionality. Supporting components such as uploads and utilities provide reusable functionality.
+
+The Data Layer is responsible for data management and persistence. Models define the structure of the system entities, config manages environment and database connections, and the database module contains schema definitions and setup logic.
+
+Additionally, the Project Support components such as scripts and tests assist in development and testing but are not part of the runtime system.
+
+Dependencies follow a top-down flow from the Presentation Layer to the Data Layer. Each layer depends only on the layer directly below it, ensuring a clean separation of concerns and improving maintainability, scalability, and testability of the system.
 ## 8. Physical Architecture
+The Physical Architecture section was omitted because Roommie uses a simple single-server deployment and does not involve complex infrastructure or distributed components. For this project, the software and process views already describe the runtime environment sufficiently, so a separate physical view would add little new insight.
+
 ## 9. Scenarios
 
 ### Scenario 1: User Registration with OTP
