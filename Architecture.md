@@ -568,7 +568,87 @@ The development architecture of the Roommie system follows a layered structure c
 
 ### Package Diagram
 
-![!(<images/Package diagram.png>)](images/package-diagram.png)
+flowchart TB
+  subgraph Presentation_Layer["Presentation Layer"]
+    FP["frontend/pages"]
+    FS["frontend/scripts"]
+    FAPI["scripts/api"]
+    FAUTH["scripts/auth"]
+    FLAYOUT["scripts/layout"]
+    FLIST["scripts/listing"]
+    FPAGE["scripts/pages"]
+    FUSER["scripts/user"]
+    FSTY["frontend/styles"]
+    FSHARED["styles/shared"]
+    FHOME["styles/home"]
+    FLSTY["styles/listing"]
+    FUSTY["styles/user"]
+    FIMG["frontend/images"]
+
+    FP --> FS
+    FS --> FAPI
+    FS --> FAUTH
+    FS --> FLAYOUT
+    FS --> FLIST
+    FS --> FPAGE
+    FS --> FUSER
+    FSTY --> FSHARED
+    FSTY --> FHOME
+    FSTY --> FLSTY
+    FSTY --> FUSTY
+  end
+
+  subgraph Application_Layer["Application Layer"]
+    BR["backend/routes"]
+    BC["backend/controllers"]
+    BM["backend/middlewares"]
+  end
+
+  subgraph Business_Layer["Business Layer"]
+    BS["backend/services"]
+    BDL["backend/domains/listing"]
+    BU["backend/utils"]
+    BUP["backend/uploads"]
+  end
+
+  subgraph Data_Layer["Data Layer"]
+    BMO["backend/models"]
+    BCFG["backend/config"]
+    BDB["backend/database"]
+    BSCHEMA["database/schema"]
+    BREF["database/reference-data"]
+    BSETUP["database/setup"]
+  end
+
+  subgraph Support["Project Support"]
+    RS["scripts"]
+    RT["tests"]
+  end
+
+  FP --> BR
+  FS --> BR
+
+  BR --> BM
+  BR --> BC
+  BC --> BS
+
+  BS --> BDL
+  BS --> BU
+  BS --> BMO
+  BS --> BUP
+
+  BMO --> BU
+  BMO --> BCFG
+  BMO --> BDB
+
+  BDB --> BSCHEMA
+  BDB --> BREF
+  BDB --> BSETUP
+
+  RS --> BSETUP
+  RS --> BCFG
+  RT --> BS
+  RT --> BU
 
 The Presentation Layer contains the frontend components responsible for user interaction, including pages, scripts, styles, and images. The scripts module handles client-side logic and communicates with the backend through API calls.
 
