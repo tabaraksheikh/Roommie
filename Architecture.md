@@ -426,8 +426,247 @@ flowchart TD
 
 This activity diagram shows the process of registering a new user account with email verification. It includes signup validation, OTP generation, email sending, OTP verification, and final account creation.
 
+## Login Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as Frontend UI
+    participant API as API Client
+    participant Route as Auth Route
+    participant Controller as Auth Controller
+    participant Service as Auth Service
+    participant DB as User Model / Database
+    participant Storage as localStorage
+
+    User->>UI: Enter email and password
+    UI->>UI: handleLogin()
+    UI->>API: RoommieAPI.login(email, password)
+    API->>Route: POST /api/auth/login
+    Route->>Controller: login(req, res)
+    Controller->>Service: login({ email, password })
+    Service->>DB: findByEmail(email)
+
+    alt User not found
+        DB-->>Service: null
+        Service-->>Controller: 401 Invalid email or password
+        Controller-->>Route: Error response
+        Route-->>API: 401 JSON error
+        API-->>UI: throw Error(...)
+        UI-->>User: Show error toast
+    else User found
+        DB-->>Service: user + hashed password
+        Service->>Service: Compare password with bcrypt
+
+        alt Password is incorrect
+            Service-->>Controller: 401 Invalid email or password
+            Controller-->>Route: Error response
+            Route-->>API: 401 JSON error
+            API-->>UI: throw Error(...)
+            UI-->>User: Show error toast
+        else Password is correct
+            Service->>Service: Generate JWT token
+            Service-->>Controller: { token, user }
+            Controller-->>Route: 200 Login successful
+            Route-->>API: { token, user }
+            API->>Storage: setToken(token)
+            API->>Storage: setUser(user)
+            API-->>UI: Success response
+            UI->>UI: close login modal
+            UI->>UI: completeAuthFlow(user, "login")
+            UI-->>User: Redirect to target page / browse page
+        end
+    end
+
+```
+
+This sequence diagram shows the login flow of the Roommie website. The process starts when the user enters their email and password in the login modal and clicks the Log In button. The frontend handles this action through the login form and calls RoommieAPI.login(email, password) from the API client. Then, the API client sends a POST /api/auth/login request to the backend authentication route.
+
+On the backend, the authentication route forwards the request to the authentication controller, which passes the email and password to the authentication service. The service searches for the user in the user model/database by using the submitted email address. If no user is found, the system returns an error response such as “Invalid email or password”, and the frontend displays this message as a toast notification.
+
+If the user exists, the authentication service compares the entered password with the stored hashed password using bcrypt. If the password is incorrect, the backend again returns a 401 error, and the frontend shows an error toast. If the password is correct, the backend generates a JWT token and returns the token together with the user information.
+
+After a successful login, the API client stores the token and user data in localStorage as roommie_token and roommie_user. The frontend then closes the login modal, updates the authenticated user interface, and redirects the user to the appropriate Roommie page, such as the browse page or the previously requested protected page.
+
+## Post Listing Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as Frontend UI
+    participant API as API Client
+    participant Auth as Auth Middleware
+    participant Upload as Upload Middleware
+    participant Controller as Listings Controller
+    participant Service as Listings Service
+    participant DB as Listing Model / Database
+
+    User->>UI: Fill listing form and click "Publish Listing"
+    UI->>UI: publishListing()
+
+    alt User is not logged in
+        UI-->>User: Show login modal
+    else User is logged in
+        UI->>UI: Validate required fields
+        UI->>UI: Normalize WhatsApp and map link
+        UI->>UI: Build FormData with listing data and images
+        UI->>API: RoommieAPI.createListing(formData)
+        API->>Auth: POST /api/listings with Bearer token
+
+        alt Token is missing or invalid
+            Auth-->>API: 401 Unauthorized
+            API-->>UI: throw Error(...)
+            UI-->>User: Show error toast
+        else Token is valid
+            Auth->>Upload: Continue request
+            Upload->>Upload: upload.array("images", 6)
+
+            alt Invalid file type or file too large
+                Upload-->>API: Upload error
+                API-->>UI: throw Error(...)
+                UI-->>User: Show error toast
+            else Files accepted
+                Upload->>Controller: createListing(req, res)
+                Controller->>Controller: Extract listing data and image URLs
+                Controller->>Service: createListing(userId, body, imageUrls)
+
+                alt Listing validation fails
+                    Service-->>Controller: 400 Validation error
+                    Controller-->>API: Error response
+                    API-->>UI: throw Error(...)
+                    UI-->>User: Show error toast
+                else Listing data is valid
+                    Service->>DB: createListing(...)
+                    DB-->>Service: Created listing row
+                    Service-->>Controller: Formatted listing
+                    Controller-->>API: 201 Listing created
+                    API-->>UI: Success response
+                    UI-->>User: Show "Listing published"
+                    UI->>UI: Redirect to /pages/space.html
+                end
+            end
+        end
+    end
+
+```
+
+This sequence diagram shows how a logged-in Roommie user publishes a new room listing. The process starts when the user fills in the listing form with details such as title, room type, city, district, description, price, phone number, WhatsApp information, map location, amenities, roommate preferences, and room images. When the user clicks Publish Listing, the frontend runs publishListing().
+
+First, the frontend checks whether the user is logged in by using the stored authentication data. If the user is not logged in, Roommie displays the login modal and stops the publishing process. If the user is logged in, the frontend validates the required fields, normalizes the WhatsApp and map location values, and builds a FormData object that contains both the listing details and uploaded image files.
+
+The API client then calls RoommieAPI.createListing(formData) and sends a POST /api/listings request with a Bearer token in the Authorization header. On the backend, the authentication middleware checks whether the token is missing, invalid, or expired. If the token is not valid, the server returns an unauthorized error, and the frontend shows an error toast.
+
+If the token is valid, the upload middleware processes the uploaded room images. If an uploaded file is invalid or too large, the server returns an upload error, and the frontend displays the error. If the files are accepted, the request continues to the listings controller. The controller extracts the listing data and image URLs, then sends them to the listings service.
+
+The listings service validates the listing data. If the listing information is missing or invalid, it returns a validation error. If the listing data is valid, the service creates a new listing record in the database through the listing model. After the database confirms that the listing has been created, the backend returns a success response. Finally, the frontend shows a “Listing published” message and redirects the user to the My Space page.
+
+
+
 ## 7. Development Architecture
+
+The development architecture of the Roommie system follows a layered structure consisting of Presentation, Application, Business, and Data layers. Each layer is responsible for a specific concern and interacts only with adjacent layers to maintain low coupling and high cohesion. The diagram below illustrates the organization of modules and their dependencies within the system.
+
+### Package Diagram
+
+```mermaid
+flowchart TB
+  subgraph Presentation_Layer["Presentation Layer"]
+    FP["frontend/pages"]
+    FS["frontend/scripts"]
+    FAPI["scripts/api"]
+    FAUTH["scripts/auth"]
+    FLAYOUT["scripts/layout"]
+    FLIST["scripts/listing"]
+    FPAGE["scripts/pages"]
+    FUSER["scripts/user"]
+    FSTY["frontend/styles"]
+    FSHARED["styles/shared"]
+    FHOME["styles/home"]
+    FLSTY["styles/listing"]
+    FUSTY["styles/user"]
+    FIMG["frontend/images"]
+
+    FP --> FS
+    FS --> FAPI
+    FS --> FAUTH
+    FS --> FLAYOUT
+    FS --> FLIST
+    FS --> FPAGE
+    FS --> FUSER
+    FSTY --> FSHARED
+    FSTY --> FHOME
+    FSTY --> FLSTY
+    FSTY --> FUSTY
+  end
+
+  subgraph Application_Layer["Application Layer"]
+    BR["backend/routes"]
+    BC["backend/controllers"]
+    BM["backend/middlewares"]
+  end
+
+  subgraph Business_Layer["Business Layer"]
+    BS["backend/services"]
+    BDL["backend/domains/listing"]
+    BU["backend/utils"]
+    BUP["backend/uploads"]
+  end
+
+  subgraph Data_Layer["Data Layer"]
+    BMO["backend/models"]
+    BCFG["backend/config"]
+    BDB["backend/database"]
+    BSCHEMA["database/schema"]
+    BREF["database/reference-data"]
+    BSETUP["database/setup"]
+  end
+
+  subgraph Support["Project Support"]
+    RS["scripts"]
+    RT["tests"]
+  end
+
+  FP --> BR
+  FS --> BR
+
+  BR --> BM
+  BR --> BC
+  BC --> BS
+
+  BS --> BDL
+  BS --> BU
+  BS --> BMO
+  BS --> BUP
+
+  BMO --> BU
+  BMO --> BCFG
+  BMO --> BDB
+
+  BDB --> BSCHEMA
+  BDB --> BREF
+  BDB --> BSETUP
+
+  RS --> BSETUP
+  RS --> BCFG
+  RT --> BS
+  RT --> BU
+```
+The Presentation Layer contains the frontend components responsible for user interaction, including pages, scripts, styles, and images. The scripts module handles client-side logic and communicates with the backend through API calls.
+
+The Application Layer includes routes, controllers, and middlewares. Routes define the system endpoints, middlewares handle request validation and authentication, and controllers coordinate incoming requests by invoking the appropriate business logic.
+
+The Business Layer contains the core logic of the system. The services module implements application-level operations such as email and OTP handling, while the listing domain module encapsulates listing-related functionality. Supporting components such as uploads and utilities provide reusable functionality.
+
+The Data Layer is responsible for data management and persistence. Models define the structure of the system entities, config manages environment and database connections, and the database module contains schema definitions and setup logic.
+
+Additionally, the Project Support components such as scripts and tests assist in development and testing but are not part of the runtime system.
+
+Dependencies follow a top-down flow from the Presentation Layer to the Data Layer. Each layer depends only on the layer directly below it, ensuring a clean separation of concerns and improving maintainability, scalability, and testability of the system.
+
 ## 8. Physical Architecture
+
+The Physical Architecture section was omitted because Roommie uses a simple single-server deployment and does not involve complex infrastructure or distributed components. For this project, the software and process views already describe the runtime environment sufficiently, so a separate physical view would add little new insight.
+
 ## 9. Scenarios
 
 ### Scenario 1: User Registration with OTP
@@ -514,7 +753,7 @@ authentication
 listing management
 image management
 reference data usage
-persistence consistency between these 5 scenario none of them are same right
+persistence consistency 
 
 
 ## 10. Size and Performance
