@@ -432,6 +432,7 @@ The development architecture of the Roommie system follows a layered structure c
 
 ### Package Diagram
 
+```mermaid
 flowchart TB
   subgraph Presentation_Layer["Presentation Layer"]
     FP["frontend/pages"]
@@ -513,7 +514,7 @@ flowchart TB
   RS --> BCFG
   RT --> BS
   RT --> BU
-
+```
 The Presentation Layer contains the frontend components responsible for user interaction, including pages, scripts, styles, and images. The scripts module handles client-side logic and communicates with the backend through API calls.
 
 The Application Layer includes routes, controllers, and middlewares. Routes define the system endpoints, middlewares handle request validation and authentication, and controllers coordinate incoming requests by invoking the appropriate business logic.
@@ -616,7 +617,7 @@ authentication
 listing management
 image management
 reference data usage
-persistence consistency between these 5 scenario none of them are same right
+persistence consistency 
 
 
 ## 10. Size and Performance
