@@ -327,8 +327,6 @@ classDiagram
   OtpModel ..> OTPRequest : reads/writes
 
   AuthService --> UserModel : uses
-  AuthService --> OtpStore : uses
-  AuthService --> EmailService : triggers
   UsersService --> UserModel : uses
   ListingsService --> ListingModel : uses
   ListingsService --> UploadCleanup : uses
@@ -337,6 +335,8 @@ classDiagram
   OtpStore --> OtpModel : uses
 
   AuthController --> AuthService : delegates to
+  AuthController --> OtpStore : uses
+  AuthController --> EmailService : triggers
   ListingsController --> ListingsService : delegates to
   UsersController --> UsersService : delegates to
   SavedController --> SavedService : delegates to
