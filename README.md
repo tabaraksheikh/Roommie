@@ -1,4 +1,4 @@
-# Roommie – Student Housing Finder Platform
+# Roommie – Housing Finder Platform
 
 ## Team Details
 
@@ -12,9 +12,12 @@
 
 ## Project Introduction
 
-Roommie is a web-based platform designed to help university students find suitable accommodation and compatible roommates. The platform addresses a common problem faced by students — the housing search process is often disorganized, relying on scattered social media posts and word of mouth with no structured way to filter by preferences or compatibility.
+Roommie is a web-based platform designed to help individuals find suitable accommodation and compatible roommates. The platform addresses a common problem in the housing search process — it is often disorganized, relying on scattered social media posts and word of mouth, with no structured way to filter by preferences or compatibility.
 
-Roommie solves this by providing a centralized space where students who have a spare room can post an advertisement, and students searching for housing can browse, filter, and contact advertisers directly. The system allows filtering by location, price, room type, and lifestyle preferences such as smoking policy, noise level, and pet friendliness — making it easier for students to find not just a room, but a compatible living situation.
+Roommie solves this by providing a centralized space where users who have a spare room can post advertisements, and users searching for housing can browse, filter, and contact advertisers directly. The system allows filtering by location, price, room type, and lifestyle preferences such as smoking policy, noise level, and pet friendliness — making it easier for users to find not just a place to stay, but a compatible living situation.
+
+The platform is designed to be flexible and accessible to a wide range of users, not limited to students, making it suitable for anyone looking for shared housing or roommates.
+
 
 ## Architecture Link
 
