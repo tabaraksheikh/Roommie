@@ -11,9 +11,11 @@ The project focuses on core features such as user registration, listing manageme
 Advanced features such as online payments, identity verification, and integration with external services are out of the scope of this project, as the goal is to keep the system simple and focused.
 
 ## 2. References
-https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
-https://www.geeksforgeeks.org/system-design/package-diagram-introduction-elements-use-cases-and-benefits/
-https://en.wikipedia.org/wiki/4%2B1_architectural_view_model
+- https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
+
+- https://www.geeksforgeeks.org/system-design/package-diagram-introduction-elements-use-cases-and-benefits/
+
+- https://en.wikipedia.org/wiki/4%2B1_architectural_view_model
 
 ## 3. Software Architecture
 The system is designed using a layered structure that separates the user interface, application logic, and data storage. This makes the application easier to organize, develop, and maintain.
