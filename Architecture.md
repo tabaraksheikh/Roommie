@@ -27,19 +27,23 @@ Backend: Handles system logic and manages users and listings
 Database: Stores user and listing data
 
 This approach keeps the system simple while still allowing future improvements.
+
 ## 4. Architectural Goals & Constraints
-Goals
+
+Goals:
 Provide a clear and easy-to-use interface
 Help users quickly find suitable listings
 Allow simple management of listings
 Keep the system organized and maintainable
 Ensure good performance
-Constraints
+
+Constraints:
 Web-based application only
 Limited time and resources (course project)
 No internal messaging system (external apps are used)
 No integration with payment systems or external APIs
 Focus on core features only (listings, search, profiles)
+
 ## 5. Logical Architecture
 The logical architecture describes the main functional components of Roommie and how responsibilities are distributed between them. It focuses on major abstractions rather than implementation details.
 
@@ -563,6 +567,78 @@ The API client then calls RoommieAPI.createListing(formData) and sends a POST /a
 If the token is valid, the upload middleware processes the uploaded room images. If an uploaded file is invalid or too large, the server returns an upload error, and the frontend displays the error. If the files are accepted, the request continues to the listings controller. The controller extracts the listing data and image URLs, then sends them to the listings service.
 
 The listings service validates the listing data. If the listing information is missing or invalid, it returns a validation error. If the listing data is valid, the service creates a new listing record in the database through the listing model. After the database confirms that the listing has been created, the backend returns a success response. Finally, the frontend shows a “Listing published” message and redirects the user to the My Space page.
+
+## Use-Case Diagram
+
+```mermaid
+usecaseDiagram
+  actor Guest
+  actor Student
+  actor Homeowner
+  actor WhatsAppSystem as "WhatsApp System"
+
+  Guest --> (Browse Listing)
+  Guest --> (Search & Filter Listing)
+  Guest --> (View Featured Listing)
+  Guest --> (Register Account)
+  Guest --> (Login)
+
+  Student --> (View Listing Details)
+  Student --> (Save Listing)
+  Student --> (Unsave Listing)
+  Student --> (View Saved Listings)
+  Student --> (Update Profile)
+  Student --> (Change Password)
+  Student --> (Request Password Reset)
+  Student --> (Reset Password)
+  Student --> (Request Email Change)
+  Student --> (Confirm Email Change)
+  Student --> (Delete Account)
+  Student --> (Contact Via WhatsApp)
+
+  Homeowner --> (Create Listing)
+  Homeowner --> (Update Listing)
+  Homeowner --> (Delete Listing)
+  Homeowner --> (View Listing Details)
+  Homeowner --> (Contact Via WhatsApp)
+
+  WhatsAppSystem --> (Contact Via WhatsApp)
+
+  (Request Password Reset) ..> (Send OTP) : include
+  (Request Email Change) ..> (Send OTP) : include
+  (Reset Password) ..> (Verify OTP) : include
+  (Confirm Email Change) ..> (Verify OTP) : include
+```
+
+This use case diagram represents the Roommie platform and shows how users interact with the system. There are four main actors: **Guest**, **Student** (logged-in user), **Homeowner** (listing owner), and an external **WhatsApp System**. Each actor has different permissions based on their role.
+
+### Guest
+Guests can explore the platform without logging in:
+- Browse listings, search, and apply filters  
+- View featured listings  
+- Register an account or log in to access more features  
+
+### Student
+Once logged in, users act as students and gain additional capabilities:
+- View detailed listing information  
+- Save/unsave listings and view saved listings  
+- Contact homeowners via WhatsApp  
+- Manage their account (update profile, change password, delete account)  
+
+### Homeowner
+Homeowners are responsible for managing listings:
+- Create new listings  
+- Update existing listings  
+- Delete listings  
+- View listing details and communicate via WhatsApp  
+
+### System Features
+- Authentication and security processes (password reset, email change)  
+- OTP-based verification (**Send OTP** and **Verify OTP**) for sensitive actions  
+- Core features like browsing, searching, and viewing listings  
+- WhatsApp integration for direct communication between users  
+
+ The system follows a marketplace model where guests explore, students search and interact, and homeowners manage listings, supported by secure authentication and communication tools.
 
 
 
