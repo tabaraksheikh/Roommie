@@ -569,37 +569,75 @@ The listings service validates the listing data. If the listing information is m
 
 ```mermaid
 flowchart LR
-  Guest[Guest] --> Browse["Browse Listing"]
-  Guest --> SearchFilter["Search & Filter Listing"]
-  Guest --> Featured["View Featured Listing"]
-  Guest --> Register["Register Account"]
-  Guest --> Login["Login"]
+  subgraph Actors
+    GuestA[Guest]
+    StudentA[Student]
+    HomeownerA[Homeowner]
+    WhatsAppSystem["WhatsApp System"]
+  end
 
-  Student[Student] --> Details["View Listing Details"]
-  Student --> Save["Save Listing"]
-  Student --> Unsave["Unsave Listing"]
-  Student --> Saved["View Saved Listings"]
-  Student --> UpdateProfile["Update Profile"]
-  Student --> ChangePassword["Change Password"]
-  Student --> RequestPasswordReset["Request Password Reset"]
-  Student --> ResetPassword["Reset Password"]
-  Student --> RequestEmailChange["Request Email Change"]
-  Student --> ConfirmEmailChange["Confirm Email Change"]
-  Student --> DeleteAccount["Delete Account"]
-  Student --> ContactWhatsApp["Contact Via WhatsApp"]
+  subgraph MainUseCases
+    Register["Register Account"]
+    Login["Login"]
+    RequestPasswordReset["Request Password Reset"]
+    RequestEmailChange["Request Email Change"]
+    ResetPassword["Reset Password"]
+    SaveListing["Save Listing"]
+    UnsaveListing["Unsave Listing"]
+    ViewSaved["View Saved Listings"]
+    DeleteAccount["Delete Account"]
+    ViewProfile["View Profile"]
+    ConfirmEmailChange["Confirm Email Change"]
+    UpdateProfile["Update Profile"]
+    ContactViaWhatsApp["Contact Via WhatsApp"]
+    ChangePassword["Change Password"]
+    DeleteListing["Delete Listing"]
+    CreateListing["Create Listings"]
+    UpdateListing["Update Listings"]
+    SearchFilter["Search & Filter Listing"]
+    ViewFeatured["View Featured Listing"]
+    BrowseListing["Browse Listing"]
+    ViewDetails["View Listing Details"]
+    SendOTP["Send OTP"]
+    VerifyOTP["Verify OTP"]
+  end
 
-  Homeowner[Homeowner] --> CreateListing["Create Listing"]
-  Homeowner --> UpdateListing["Update Listing"]
-  Homeowner --> DeleteListing["Delete Listing"]
-  Homeowner --> Details
-  Homeowner --> ContactWhatsApp
+  GuestA --> Register
+  GuestA --> Login
+  GuestA --> RequestPasswordReset
+  GuestA --> RequestEmailChange
+  GuestA --> SearchFilter
+  GuestA --> ViewFeatured
+  GuestA --> BrowseListing
 
-  WhatsAppSystem["WhatsApp System"] --> ContactWhatsApp
+  StudentA --> ViewDetails
+  StudentA --> SaveListing
+  StudentA --> UnsaveListing
+  StudentA --> ViewSaved
+  StudentA --> ViewProfile
+  StudentA --> ConfirmEmailChange
+  StudentA --> UpdateProfile
+  StudentA --> ContactViaWhatsApp
+  StudentA --> ChangePassword
+  StudentA --> DeleteAccount
 
-  RequestPasswordReset -.-> SendOTP["Send OTP"]
+  HomeownerA --> CreateListing
+  HomeownerA --> UpdateListing
+  HomeownerA --> DeleteListing
+  HomeownerA --> ViewDetails
+  HomeownerA --> ContactViaWhatsApp
+
+  WhatsAppSystem --> ContactViaWhatsApp
+
+  RequestPasswordReset -.-> SendOTP
   RequestEmailChange -.-> SendOTP
-  ResetPassword -.-> VerifyOTP["Verify OTP"]
+  ResetPassword -.-> VerifyOTP
   ConfirmEmailChange -.-> VerifyOTP
+  RequestPasswordReset --> ResetPassword
+  RequestEmailChange --> ConfirmEmailChange
+  SearchFilter --> ViewDetails
+  BrowseListing --> ViewDetails
+  ViewFeatured --> ViewDetails
 ```
 
 This use case diagram represents the Roommie platform and shows how users interact with the system. There are four main actors: **Guest**, **Student** (logged-in user), **Homeowner** (listing owner), and an external **WhatsApp System**. Each actor has different permissions based on their role.
