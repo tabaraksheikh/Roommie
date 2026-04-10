@@ -8,41 +8,38 @@ The Roommate Rental System is a web-based application designed to help users fin
 
 The project focuses on core features such as user registration, listing management, and search functionality. Communication between users is handled through external platforms like WhatsApp rather than an internal chat system.
 
-Advanced features such as online payments, identity verification, and integration with external services are out of the scope of this project, as the goal is to keep the system simple and focused.
+Advanced features such as online payments, identity verification, and integration with external services are out of scope for this project, as the goal is to keep the system simple and focused.
 
 ## 2. References
 - https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
-
 - https://www.geeksforgeeks.org/system-design/package-diagram-introduction-elements-use-cases-and-benefits/
-
 - https://en.wikipedia.org/wiki/4%2B1_architectural_view_model
 
 ## 3. Software Architecture
 The system is designed using a layered structure that separates the user interface, application logic, and data storage. This makes the application easier to organize, develop, and maintain.
 
 It includes:
-
-Frontend: The part users interact with (login, listings, search)
-Backend: Handles system logic and manages users and listings
-Database: Stores user and listing data
+- Frontend: The part users interact with (login, listings, search)
+- Backend: Handles system logic and manages users and listings
+- Database: Stores user and listing data
 
 This approach keeps the system simple while still allowing future improvements.
 
 ## 4. Architectural Goals & Constraints
 
-Goals:
-Provide a clear and easy-to-use interface
-Help users quickly find suitable listings
-Allow simple management of listings
-Keep the system organized and maintainable
-Ensure good performance
+### Goals
+- Provide a clear and easy-to-use interface
+- Help users quickly find suitable listings
+- Allow simple management of listings
+- Keep the system organized and maintainable
+- Ensure good performance
 
-Constraints:
-Web-based application only
-Limited time and resources (course project)
-No internal messaging system (external apps are used)
-No integration with payment systems or external APIs
-Focus on core features only (listings, search, profiles)
+### Constraints
+- Web-based application only
+- Limited time and resources (course project)
+- No internal messaging system (external apps are used)
+- No integration with payment systems or external APIs
+- Focus on core features only (listings, search, profiles)
 
 ## 5. Logical Architecture
 The logical architecture describes the main functional components of Roommie and how responsibilities are distributed between them. It focuses on major abstractions rather than implementation details.
@@ -571,43 +568,38 @@ The listings service validates the listing data. If the listing information is m
 ## Use-Case Diagram
 
 ```mermaid
-usecaseDiagram
-  actor Guest
-  actor Student
-  actor Homeowner
-  actor WhatsAppSystem as "WhatsApp System"
+flowchart LR
+  Guest[Guest] --> Browse["Browse Listing"]
+  Guest --> SearchFilter["Search & Filter Listing"]
+  Guest --> Featured["View Featured Listing"]
+  Guest --> Register["Register Account"]
+  Guest --> Login["Login"]
 
-  Guest --> (Browse Listing)
-  Guest --> (Search & Filter Listing)
-  Guest --> (View Featured Listing)
-  Guest --> (Register Account)
-  Guest --> (Login)
+  Student[Student] --> Details["View Listing Details"]
+  Student --> Save["Save Listing"]
+  Student --> Unsave["Unsave Listing"]
+  Student --> Saved["View Saved Listings"]
+  Student --> UpdateProfile["Update Profile"]
+  Student --> ChangePassword["Change Password"]
+  Student --> RequestPasswordReset["Request Password Reset"]
+  Student --> ResetPassword["Reset Password"]
+  Student --> RequestEmailChange["Request Email Change"]
+  Student --> ConfirmEmailChange["Confirm Email Change"]
+  Student --> DeleteAccount["Delete Account"]
+  Student --> ContactWhatsApp["Contact Via WhatsApp"]
 
-  Student --> (View Listing Details)
-  Student --> (Save Listing)
-  Student --> (Unsave Listing)
-  Student --> (View Saved Listings)
-  Student --> (Update Profile)
-  Student --> (Change Password)
-  Student --> (Request Password Reset)
-  Student --> (Reset Password)
-  Student --> (Request Email Change)
-  Student --> (Confirm Email Change)
-  Student --> (Delete Account)
-  Student --> (Contact Via WhatsApp)
+  Homeowner[Homeowner] --> CreateListing["Create Listing"]
+  Homeowner --> UpdateListing["Update Listing"]
+  Homeowner --> DeleteListing["Delete Listing"]
+  Homeowner --> Details
+  Homeowner --> ContactWhatsApp
 
-  Homeowner --> (Create Listing)
-  Homeowner --> (Update Listing)
-  Homeowner --> (Delete Listing)
-  Homeowner --> (View Listing Details)
-  Homeowner --> (Contact Via WhatsApp)
+  WhatsAppSystem["WhatsApp System"] --> ContactWhatsApp
 
-  WhatsAppSystem --> (Contact Via WhatsApp)
-
-  (Request Password Reset) ..> (Send OTP) : include
-  (Request Email Change) ..> (Send OTP) : include
-  (Reset Password) ..> (Verify OTP) : include
-  (Confirm Email Change) ..> (Verify OTP) : include
+  RequestPasswordReset -.-> SendOTP["Send OTP"]
+  RequestEmailChange -.-> SendOTP
+  ResetPassword -.-> VerifyOTP["Verify OTP"]
+  ConfirmEmailChange -.-> VerifyOTP
 ```
 
 This use case diagram represents the Roommie platform and shows how users interact with the system. There are four main actors: **Guest**, **Student** (logged-in user), **Homeowner** (listing owner), and an external **WhatsApp System**. Each actor has different permissions based on their role.
