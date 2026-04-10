@@ -640,6 +640,8 @@ flowchart LR
   ViewFeatured --> ViewDetails
 ```
 
+![Use-Case Diagram](images/UseCase_Diagram.png)
+
 This use case diagram represents the Roommie platform and shows how users interact with the system. There are four main actors: **Guest**, **Student** (logged-in user), **Homeowner** (listing owner), and an external **WhatsApp System**. Each actor has different permissions based on their role.
 
 ### Guest
