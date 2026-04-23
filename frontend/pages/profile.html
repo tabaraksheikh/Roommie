@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Roommie - My Profile</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="../styles/shared/common.css">
+    <link rel="stylesheet" href="../styles/user/profile.css">
+</head>
+<body data-page="profile" data-requires-auth="true">
+
+<div id="app-header"></div>
+<div id="app-sidebar"></div>
+
+<main class="main" id="main-content">
+  <div class="page active" id="page-profile">
+    <div class="profile-wrap">
+      <h1>My Profile</h1>
+
+      <div class="profile-card">
+        <div class="profile-card-title">Profile Information</div>
+        <div class="avatar-row">
+          <div class="avatar" id="profile-avatar">User</div>
+          <div class="avatar-info">
+            <h3 id="profile-display-name">Alex Johnson</h3>
+            <p id="profile-display-email">alex.johnson@email.com</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <div class="input-wrap"><input class="form-input" id="pf-firstname" type="text" value="Alex"/></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <div class="input-wrap"><input class="form-input" id="pf-lastname" type="text" value="Johnson"/></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <div class="input-wrap"><input class="form-input" id="pf-email" type="email" value="alex.johnson@email.com"/></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <div class="gender-chips" id="gender-chips">
+            <span class="gender-chip" onclick="selectGender(this)">Male</span>
+            <span class="gender-chip active" onclick="selectGender(this)">Female</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">About me <span style="font-weight:400;color:var(--light)">(Are you a student? What are you looking for?)</span></label>
+          <textarea class="form-input no-icon" id="pf-bio" style="height:90px">3rd year Architecture student at State University. Non-smoker, quiet lifestyle. Looking for a furnished room within 20 min of campus.</textarea>
+        </div>
+
+        <div class="form-row-save" style="margin-top:16px">
+          <button class="btn-save-sm" onclick="saveProfileInfo()">Save Changes</button>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-card-title">Change Password</div>
+        <div class="form-group">
+          <label class="form-label">Current Password</label>
+          <div class="input-wrap">
+            <input class="form-input no-icon" id="pw-current" type="password" placeholder="Enter your password"/>
+            <button type="button" class="password-toggle" data-target="pw-current" aria-label="Show password">Show</button>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">New Password</label>
+            <div class="input-wrap">
+              <input class="form-input no-icon" id="pw-new" type="password" placeholder="Min. 8 characters"/>
+              <button type="button" class="password-toggle" data-target="pw-new" aria-label="Show password">Show</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Confirm New Password</label>
+            <div class="input-wrap">
+              <input class="form-input no-icon" id="pw-confirm" type="password" placeholder="Enter your password"/>
+              <button type="button" class="password-toggle" data-target="pw-confirm" aria-label="Show password">Show</button>
+            </div>
+            <div class="field-error" id="pw-confirm-error"></div>
+          </div>
+        </div>
+        <p style="margin:12px 0 0;text-align:right">
+          <a href="#" onclick="openForgotPasswordFromProfile(event)" style="color:var(--accent);text-decoration:underline;font-size:13px">Forgot password?</a>
+        </p>
+        <div class="form-row-save" style="margin-top:16px">
+          <button class="btn-save-sm" onclick="updatePassword()">Update Password</button>
+        </div>
+      </div>
+
+      <div class="danger-card">
+        <div class="danger-title">Warning: Delete Account</div>
+        <div class="danger-desc">This will permanently remove your profile, listings, and all saved data. This action cannot be undone.</div>
+        <button class="btn-danger" data-modal-open="confirm-delete">Delete My Account</button>
+      </div>
+    </div>
+
+    <div id="app-footer"></div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="modal-confirm-delete">
+  <div class="modal" style="text-align:center">
+    <button class="modal-close" data-modal-close="confirm-delete" aria-label="Close dialog">&times;</button>
+    <div class="confirm-icon">Delete</div>
+    <h2>Delete Account?</h2>
+    <p>This will permanently erase your profile, all listings, and saved rooms. There is no way to recover this.</p>
+    <div class="modal-btns">
+      <button class="btn-modal-secondary" data-modal-close="confirm-delete">Cancel</button>
+      <button id="confirm-delete-submit" style="flex:1;padding:13px;border-radius:10px;background:var(--orange);color:white;border:none;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer" data-modal-close="confirm-delete">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="../scripts/api/api.js"></script>
+  <script src="../scripts/layout/layout.js"></script>
+  <script src="../scripts/layout/ui.js"></script>
+  <script src="../scripts/listing/listing-normalize.js"></script>
+  <script src="../scripts/listing/listing-card.js"></script>
+  <script src="../scripts/listing/listing-save.js"></script>
+  <script src="../scripts/listing/listing-poster.js"></script>
+  <script src="../scripts/listing/listing-detail.js"></script>
+  <script src="../scripts/auth/auth-modals.js"></script>
+  <script src="../scripts/auth/auth.js"></script>
+  <script src="../scripts/layout/init.js"></script>
+  <script src="../scripts/user/profile.js"></script>
+</body>
+</html>

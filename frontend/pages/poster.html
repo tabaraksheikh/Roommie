@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roommie - Poster Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../styles/shared/common.css">
+    <link rel="stylesheet" href="../styles/user/poster.css">
+</head>
+<body data-page="poster" data-requires-auth="true">
+
+<div id="app-header"></div>
+<div id="app-sidebar"></div>
+
+<main class="main" id="main-content">
+  <div class="page active" id="page-poster">
+    <div class="poster-profile-wrap">
+      <button class="back-btn" id="poster-back-btn" data-navigate="/pages/browse.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Browse
+      </button>
+
+      <div class="poster-profile-card">
+        <div class="poster-big-avatar" id="poster-big-emoji">&#128100;</div>
+        <div class="poster-profile-name" id="poster-big-name">Loading...</div>
+        <div class="poster-profile-sub" id="poster-big-sub"></div>
+        <div class="poster-tags" id="poster-big-tags"></div>
+        <div class="poster-bio" id="poster-big-bio"></div>
+      </div>
+
+      <div class="poster-listings-title">Listings</div>
+      <div id="poster-listings-grid"></div>
+    </div>
+
+    <div id="app-footer"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="../scripts/api/api.js"></script>
+  <script src="../scripts/layout/layout.js"></script>
+  <script src="../scripts/layout/ui.js"></script>
+  <script src="../scripts/listing/listing-normalize.js"></script>
+  <script src="../scripts/listing/listing-card.js"></script>
+  <script src="../scripts/listing/listing-save.js"></script>
+  <script src="../scripts/listing/listing-poster.js"></script>
+  <script src="../scripts/listing/listing-detail.js"></script>
+  <script src="../scripts/auth/auth-modals.js"></script>
+  <script src="../scripts/auth/auth.js"></script>
+  <script src="../scripts/layout/init.js"></script>
+  <script src="../scripts/user/poster.js"></script>
+</body>
+</html>

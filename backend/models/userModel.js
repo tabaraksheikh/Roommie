@@ -45,3 +45,22 @@ async function createUser({ email, hashedPassword, firstName, lastName }) {
   );
   return findById(result.insertId);
 }
+
+/** Partial update — only the fields passed will be changed */
+async function updateUser(id, { firstName, lastName, gender, bio }) {
+  const db       = getDb();
+  const existing = await findById(id);
+  if (!existing) return null;
+
+  await db.query(
+    'UPDATE users SET first_name = ?, last_name = ?, gender = ?, bio = ? WHERE id = ?',
+    [
+      firstName !== undefined ? firstName : existing.first_name,
+      lastName  !== undefined ? lastName  : existing.last_name,
+      gender    !== undefined ? gender    : existing.gender,
+      bio       !== undefined ? bio       : existing.bio,
+      id,
+    ]
+  );
+  return findById(id);
+}

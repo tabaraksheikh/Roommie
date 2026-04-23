@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roommie - My Space</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../styles/shared/common.css">
+    <link rel="stylesheet" href="../styles/listing/post.css">
+    <link rel="stylesheet" href="../styles/listing/space.css">
+</head>
+<body data-page="space" data-requires-auth="true">
+
+<div id="app-header"></div>
+<div id="app-sidebar"></div>
+
+<main class="main" id="main-content">
+  <div class="page active" id="page-space">
+    <div class="space-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <div>
+          <h1 class="space-title">My Space</h1>
+          <p style="font-size:14px;color:var(--light);margin-top:3px">Your listings and saved rooms</p>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='post.html'">+ Post a Room</button>
+      </div>
+
+      <div class="space-tabs">
+        <div class="space-tab active" onclick="switchSpaceTab(this,'tab-mylistings')">My Listings</div>
+        <div class="space-tab" onclick="switchSpaceTab(this,'tab-saved')">Saved Rooms</div>
+      </div>
+
+      <div class="tab-pane active" id="tab-mylistings"></div>
+      <div class="tab-pane" id="tab-saved"></div>
+    </div>
+
+    <div id="app-footer"></div>
+  </div>
+
+  <div class="page" id="page-edit">
+    <div class="post-wrap edit-wrap">
+      <button class="back-btn" id="edit-back-btn" onclick="showPage('space')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to My Space
+      </button>
+
+      <h1>Edit Listing</h1>
+      <p class="page-sub">Update your room details with the same flow as creating a new listing.</p>
+
+      <div class="edit-preview-strip">
+        <div class="edit-preview-info">
+          <div class="edit-preview-label">Live Preview</div>
+          <div class="edit-preview-title" id="edit-preview-title">Loading...</div>
+          <div class="edit-preview-meta" id="edit-preview-meta"></div>
+        </div>
+        <div class="edit-preview-price" id="edit-preview-price"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Basic Information</div>
+        <div class="form-group">
+          <label class="form-label">Listing Title</label>
+          <div class="input-wrap"><input class="form-input no-icon" type="text" id="edit-title" placeholder="e.g. Sunny Private Room near Campus" oninput="updateEditPreview()"/></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room Type</label>
+          <div class="type-chips" id="edit-type-chips">
+            <span class="type-chip active" onclick="selectEditType(this)">Private</span>
+            <span class="type-chip" onclick="selectEditType(this)">Shared</span>
+            <span class="type-chip" onclick="selectEditType(this)">Studio</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <div class="input-wrap">
+            <select class="form-input no-icon" id="edit-city" onchange="handleEditCityChange()">
+              <option value="">Select city...</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">District</label>
+          <div class="input-wrap">
+            <select class="form-input no-icon" id="edit-district" onchange="updateEditPreview()" disabled>
+              <option value="">Select district...</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input no-icon" id="edit-desc" placeholder="Describe the room, amenities, house rules..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Amenities</div>
+        <div class="amenity-grid" id="edit-amenity-grid">
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">WiFi</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Furnished</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Laundry</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Kitchen Access</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Private Bathroom</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Parking</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Air Conditioning</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Gym Access</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Balcony</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Photos</div>
+        <div class="upload-zone" id="edit-upload-zone">
+          <div class="upload-zone-copy">
+            <strong>Add up to 6 photos</strong>
+            <span>Click or drag images here</span>
+          </div>
+        </div>
+        <div class="upload-previews" id="edit-upload-previews"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Monthly Rent (TL)</div>
+        <div class="price-wrap">
+          <span class="price-symbol">TL </span>
+          <input class="form-input no-icon" style="padding-left:36px" type="text" inputmode="decimal" id="edit-price" value="1.00" placeholder="1.00" oninput="updateEditPreview()"/>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="prefs-card">
+          <div class="form-section-title" style="border:none;padding:0;margin-bottom:20px">Roommate Preferences</div>
+          <div class="pref-group"><div class="filter-label">Current Number of Roommates</div><div class="radio-row"><label class="radio-option"><input type="radio" name="edit-roommates" value="0" checked/> None (solo)</label><label class="radio-option"><input type="radio" name="edit-roommates" value="1"/> 1</label><label class="radio-option"><input type="radio" name="edit-roommates" value="2"/> 2</label><label class="radio-option"><input type="radio" name="edit-roommates" value="3"/> 3</label><label class="radio-option"><input type="radio" name="edit-roommates" value="4"/> 4+</label></div></div>
+          <div class="pref-group"><div class="filter-label">Preferred Gender</div><div class="radio-row"><label class="radio-option"><input type="radio" name="edit-gender" value="Any" checked/> Any</label><label class="radio-option"><input type="radio" name="edit-gender" value="Male"/> Male</label><label class="radio-option"><input type="radio" name="edit-gender" value="Female"/> Female</label></div></div>
+          <div class="pref-group"><div class="filter-label">Smoking Policy</div><div class="radio-row"><label class="radio-option"><input type="radio" name="edit-smoke" value="Non-smoker only" checked/> Non-smoker only</label><label class="radio-option"><input type="radio" name="edit-smoke" value="No preference"/> No preference</label></div></div>
+          <div class="pref-group"><div class="filter-label">Living Environment</div><div class="radio-row"><label class="radio-option"><input type="radio" name="edit-env" value="Quiet environment" checked/> Quiet</label><label class="radio-option"><input type="radio" name="edit-env" value="Social"/> Social</label><label class="radio-option"><input type="radio" name="edit-env" value="Balanced"/> Balanced</label></div></div>
+          <div class="pref-group"><div class="filter-label">Pets</div><div class="radio-row"><label class="radio-option"><input type="radio" name="edit-pets" value="No pets" checked/> No pets</label><label class="radio-option"><input type="radio" name="edit-pets" value="Allowed"/> Allowed</label></div></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="contact-card">
+          <div class="form-section-title">Contact Information</div>
+          <div class="form-group"><label class="form-label">Phone Number</label><div class="input-wrap"><input class="form-input no-icon" type="tel" id="edit-phone" placeholder="+90 555 123 45 67" required/></div></div>
+          <div class="form-group"><label class="form-label">WhatsApp Link / Number</label><div class="input-wrap"><input class="form-input no-icon" type="text" id="edit-wa" placeholder="https://wa.me/15551234567" value="+90"/></div><div class="field-error" id="edit-wa-error"></div></div>
+          <div class="form-group" style="margin-bottom:0"><label class="form-label">Map Location</label><div class="input-wrap"><input class="form-input no-icon" type="text" id="edit-map-location" placeholder="https://maps.app.goo.gl/..."/></div><div class="field-error" id="edit-map-location-error"></div><div class="field-help">Optional. Paste the Google Maps share link in `maps.app.goo.gl` format.</div></div>
+        </div>
+      </div>
+
+      <div class="edit-actions-row">
+        <button class="btn-discard" onclick="showPage('space')">Discard Changes</button>
+        <button class="btn-save-edit" onclick="saveEditListing()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Save Changes
+        </button>
+      </div>
+
+      <div class="edit-delete-zone">
+        <div class="edit-delete-text">
+          <h4>Warning: Delete this listing</h4>
+          <p>This will permanently remove the listing and cannot be undone.</p>
+        </div>
+        <button class="btn-danger" id="edit-delete-btn">Delete Listing</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-detail">
+    <div class="detail-wrap">
+      <button class="back-btn" id="detail-back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <div class="detail-grid">
+        <div>
+          <div class="detail-img-placeholder" id="detail-img">Room</div>
+          <div class="detail-meta">
+            <span class="badge" id="detail-badge"></span>
+            <span class="detail-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="detail-location"></span>
+            </span>
+          </div>
+          <h1 class="detail-title" id="detail-title"></h1>
+          <p class="detail-desc" id="detail-desc"></p>
+          <div class="detail-section-title">Amenities</div>
+          <div class="amenity-tags" id="detail-amenities"></div>
+          <div class="detail-section-title">Roommate Preferences</div>
+          <div class="prefs-grid" id="detail-prefs"></div>
+        </div>
+        <div>
+          <div class="booking-card">
+            <div class="booking-price"><span id="detail-price"></span><span>/month</span></div>
+            <hr class="booking-divider" style="margin-top:16px"/>
+            <div id="detail-poster-card" class="poster-card">
+              <div class="poster-avatar" id="detail-poster-emoji">&#128100;</div>
+              <div><div class="poster-name" id="detail-poster-name"></div><div class="poster-sub" id="detail-poster-sub"></div></div>
+              <div class="poster-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+            <hr class="booking-divider"/>
+            <div class="contact-section-title">Contact Information</div>
+            <div class="contact-info-row"><button id="detail-phone" type="button" class="contact-phone-btn"></button></div>
+            <button class="btn-map" id="detail-map-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>Open in Maps</button>
+            <button class="btn-wa" id="detail-wa-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Chat on WhatsApp</button>
+            <button class="btn-save" onclick="showToast('Listing saved!')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Save Listing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-poster">
+    <div class="poster-profile-wrap">
+      <button class="back-btn" id="poster-back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <div class="poster-profile-card">
+        <div class="poster-big-avatar" id="poster-big-emoji">&#128100;</div>
+        <div class="poster-profile-name" id="poster-big-name"></div>
+        <div class="poster-profile-sub" id="poster-big-sub"></div>
+        <div class="poster-tags" id="poster-big-tags"></div>
+        <div class="poster-bio" id="poster-big-bio"></div>
+      </div>
+      <div class="poster-listings-title">Listings</div>
+      <div id="poster-listings-grid"></div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="../scripts/api/api.js"></script>
+<script src="/reference-data/turkeyLocationsData.js"></script>
+  <script src="../scripts/listing/location-utils.js"></script>
+  <script src="../scripts/layout/layout.js"></script>
+  <script src="../scripts/layout/ui.js"></script>
+  <script src="../scripts/listing/listing-normalize.js"></script>
+  <script src="../scripts/listing/listing-card.js"></script>
+  <script src="../scripts/listing/listing-save.js"></script>
+  <script src="../scripts/listing/listing-poster.js"></script>
+  <script src="../scripts/listing/listing-detail.js"></script>
+  <script src="../scripts/auth/auth-modals.js"></script>
+  <script src="../scripts/auth/auth.js"></script>
+  <script src="../scripts/layout/init.js"></script>
+  <script src="../scripts/pages/space.js"></script>
+</body>
+</html>

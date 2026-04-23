@@ -1,0 +1,18 @@
+/* ══════════════════════════════════════════════
+   ROOMMIE — POSTER PAGE STYLES  (poster.css)
+   The standalone poster.html page.
+   All .poster-* component styles live in common.css.
+   This file holds any poster.html-specific overrides.
+   ══════════════════════════════════════════════ */
+
+/* Poster page is a simple single-column layout.
+   All structural styles (.poster-profile-wrap, .poster-profile-card,
+   .poster-big-avatar, .poster-profile-name, .poster-tags, .poster-bio,
+   .poster-listings-title) are defined in common.css and apply here too. */
+
+/* poster.html listings grid is the standard rooms-grid from common.css */
+#poster-listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
