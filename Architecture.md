@@ -8,41 +8,38 @@ The Roommate Rental System is a web-based application designed to help users fin
 
 The project focuses on core features such as user registration, listing management, and search functionality. Communication between users is handled through external platforms like WhatsApp rather than an internal chat system.
 
-Advanced features such as online payments, identity verification, and integration with external services are out of the scope of this project, as the goal is to keep the system simple and focused.
+Advanced features such as online payments, identity verification, and integration with external services are out of scope for this project, as the goal is to keep the system simple and focused.
 
 ## 2. References
 - https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
-
 - https://www.geeksforgeeks.org/system-design/package-diagram-introduction-elements-use-cases-and-benefits/
-
 - https://en.wikipedia.org/wiki/4%2B1_architectural_view_model
 
 ## 3. Software Architecture
 The system is designed using a layered structure that separates the user interface, application logic, and data storage. This makes the application easier to organize, develop, and maintain.
 
 It includes:
-
-Frontend: The part users interact with (login, listings, search)
-Backend: Handles system logic and manages users and listings
-Database: Stores user and listing data
+- Frontend: The part users interact with (login, listings, search)
+- Backend: Handles system logic and manages users and listings
+- Database: Stores user and listing data
 
 This approach keeps the system simple while still allowing future improvements.
 
 ## 4. Architectural Goals & Constraints
 
-Goals:
-Provide a clear and easy-to-use interface
-Help users quickly find suitable listings
-Allow simple management of listings
-Keep the system organized and maintainable
-Ensure good performance
+### Goals
+- Provide a clear and easy-to-use interface
+- Help users quickly find suitable listings
+- Allow simple management of listings
+- Keep the system organized and maintainable
+- Ensure good performance
 
-Constraints:
-Web-based application only
-Limited time and resources (course project)
-No internal messaging system (external apps are used)
-No integration with payment systems or external APIs
-Focus on core features only (listings, search, profiles)
+### Constraints
+- Web-based application only
+- Limited time and resources (course project)
+- No internal messaging system (external apps are used)
+- No integration with payment systems or external APIs
+- Focus on core features only (listings, search, profiles)
 
 ## 5. Logical Architecture
 The logical architecture describes the main functional components of Roommie and how responsibilities are distributed between them. It focuses on major abstractions rather than implementation details.
@@ -146,213 +143,7 @@ The layered class diagram is placed in this section because it shows the main lo
 ## Layered Class Diagram
 The following layered class diagram presents the main structural elements of Roommie and the relationships between controllers, services, models, entities, and utility components. It shows how responsibilities are separated across the backend architecture and how the major system components interact.
 
-```mermaid
-classDiagram
-  direction TB
-
-  namespace Entities {
-    class User["User <<entity>>"] {
-      -id : int
-      -email : string
-      -password : string
-      -first_name : string
-      -last_name : string
-      -gender : string
-      -bio : string
-    }
-    class Listing["Listing <<entity>>"] {
-      -id : int
-      -user_id : int
-      -city_id : int
-      -district_id : int
-      -title : string
-      -type : string
-      -price : decimal
-      -phone : string
-      -imageUrls : string[]
-      -created_at : datetime
-    }
-    class SavedRoom["SavedRoom <<entity>>"] {
-      -id : int
-      -user_id : int
-      -listing_id : int
-      -created_at : datetime
-    }
-    class OTPRequest["OTPRequest <<entity>>"] {
-      -id : int
-      -email : string
-      -purpose : string
-      -otp_code : string
-      -expires_at : datetime
-      -used_at : datetime
-    }
-    class City["City <<entity>>"] {
-      -id : int
-      -name : string
-      -slug : string
-      -plate_code : string
-    }
-    class District["District <<entity>>"] {
-      -id : int
-      -city_id : int
-      -name : string
-      -slug : string
-    }
-    class Amenity["Amenity <<entity>>"] {
-      -id : int
-      -name : string
-      -slug : string
-    }
-  }
-
-  namespace Models {
-    class UserModel["UserModel <<model>>"] {
-      +findById(id)
-      +findByIdWithPassword(id)
-      +findByEmail(email)
-      +createUser(data)
-      +updateUser(id, data)
-      +updateEmail(id, email)
-      +updatePassword(id, hash)
-      +deleteUser(id)
-    }
-    class ListingModel["ListingModel <<model>>"] {
-      +findById(id)
-      +findRawById(id)
-      +findAll(filters, limit, offset)
-      +findFeatured()
-      +createListing(data)
-      +updateListing(id, data)
-      +deleteListing(id)
-      +resolveLocationRefs(location)
-      +syncListingAmenities(id, amenities)
-    }
-    class SavedModel["SavedModel <<model>>"] {
-      +findAllByUser(userId)
-      +isSaved(userId, listingId)
-      +saveListing(userId, listingId)
-      +unsaveListing(userId, listingId)
-    }
-    class OtpModel["OtpModel <<model>>"] {
-      +replacePendingOtp(data)
-      +findLatestPendingOtp(email, purpose)
-      +markOtpUsed(id)
-    }
-  }
-
-  namespace Services {
-    class AuthService["AuthService <<service>>"] {
-      +register(data)
-      +login(data)
-      +changePassword(userId, data)
-      +resetPassword(userId, newPassword)
-      +changeEmail(userId, newEmail)
-      +deleteAccount(userId)
-    }
-    class UsersService["UsersService <<service>>"] {
-      +getMe(userId)
-      +updateMe(userId, data)
-      +getUserById(userId)
-    }
-    class ListingsService["ListingsService <<service>>"] {
-      +getListings(query)
-      +getFeatured()
-      +getListingById(id)
-      +createListing(userId, body, imageUrls)
-      +updateListing(listingId, userId, body, imageFiles)
-      +deleteListing(listingId, userId)
-    }
-    class SavedService["SavedService <<service>>"] {
-      +getSavedListings(userId)
-      +checkSaved(userId, listingId)
-      +saveListing(userId, listingId)
-      +unsaveListing(userId, listingId)
-    }
-    class OtpStore["OtpStore <<service>>"] {
-      +saveOtp(email, purpose, payload)
-      +verifyOtp(email, purpose, code)
-    }
-    class EmailService["EmailService <<service>>"] {
-      +sendOtpEmail(toEmail, otp, type)
-    }
-  }
-
-  namespace Controllers {
-    class AuthController["AuthController <<controller>>"] {
-      +sendVerification(req, res)
-      +verifyEmail(req, res)
-      +login(req, res)
-      +getMe(req, res)
-      +changePassword(req, res)
-      +requestEmailChange(req, res)
-      +confirmEmailChange(req, res)
-      +requestPasswordReset(req, res)
-      +resetPassword(req, res)
-      +deleteAccount(req, res)
-    }
-    class ListingsController["ListingsController <<controller>>"] {
-      +getListings(req, res)
-      +getFeatured(req, res)
-      +getListingById(req, res)
-      +createListing(req, res)
-      +updateListing(req, res)
-      +deleteListing(req, res)
-    }
-    class UsersController["UsersController <<controller>>"] {
-      +getMe(req, res)
-      +updateMe(req, res)
-      +getUserById(req, res)
-    }
-    class SavedController["SavedController <<controller>>"] {
-      +getSavedListings(req, res)
-      +checkSaved(req, res)
-      +saveListing(req, res)
-      +unsaveListing(req, res)
-    }
-  }
-
-  namespace Utilities {
-    class PriceUtil["PriceUtil <<utility>>"] {
-      +parseDecimalPrice(value)
-    }
-    class UploadCleanup["UploadCleanup <<utility>>"] {
-      +deleteUploadFiles(imageUrls)
-      +resolveUploadPath(imageUrl)
-    }
-  }
-
-  User "1" --> "0..*" Listing : owns
-  User "1" --> "0..*" SavedRoom : saves
-  SavedRoom "0..*" --> "1" Listing : references
-  City "1" --> "0..*" District : contains
-  Listing "0..*" --> "0..1" City : located in
-  Listing "0..*" --> "0..1" District : located in
-  Listing "0..*" --> "0..*" Amenity : has
-
-  UserModel ..> User : reads/writes
-  ListingModel ..> Listing : reads/writes
-  SavedModel ..> SavedRoom : reads/writes
-  OtpModel ..> OTPRequest : reads/writes
-
-  AuthService --> UserModel : uses
-  UsersService --> UserModel : uses
-  ListingsService --> ListingModel : uses
-  ListingsService --> UploadCleanup : uses
-  SavedService --> SavedModel : uses
-  SavedService --> ListingModel : validates existence
-  OtpStore --> OtpModel : uses
-
-  AuthController --> AuthService : delegates to
-  AuthController --> OtpStore : uses
-  AuthController --> EmailService : triggers
-  ListingsController --> ListingsService : delegates to
-  UsersController --> UsersService : delegates to
-  SavedController --> SavedService : delegates to
-
-  ListingsService --> PriceUtil : validates price
-  ListingModel --> PriceUtil : normalizes price
-
-```
+![Layered Class Diagram](images/Layered_class_Diagram.jpeg)
 
 The diagram reflects Roommie’s layered design. Controllers handle HTTP requests, services contain business logic, models manage database access, entities represent the main stored data objects, and utilities provide shared support functions such as price parsing and upload cleanup.
 
@@ -365,128 +156,19 @@ An activity diagram shows the step-by-step flow of actions in a system process. 
 
 #### Post Listing Activity Diagram
 
-```mermaid
-flowchart LR
-    Start([Open Post Listing page]) --> Logged{Logged in?}
-
-    Logged -- NO --> ShowLogin[Show login/signup]
-    ShowLogin --> Continue[Continue]
-    Continue --> Login[Log in or sign up]
-    Login --> Return[Return]
-
-    Logged -- YES --> FillForm[Fill listing form]
-    FillForm --> Submit[Submit]
-    Submit --> FormValid{Form valid?}
-
-    FormValid -- NO --> ShowValidationErrors[Show validation errors]
-    ShowValidationErrors --> BackToForm1[Back to form]
-    BackToForm1 --> FillForm
-
-    FormValid -- YES --> SendToServer[Send data to server]
-    SendToServer --> Save[Save]
-
-    Save --> SaveSuccess{Save successful?}
-    SaveSuccess -- NO --> ShowSaveError[Show save error]
-    ShowSaveError --> BackToForm2[Back to form]
-    BackToForm2 --> FillForm
-
-    SaveSuccess -- YES --> StoreInDB[Store in database]
-    StoreInDB --> Respond[Respond]
-    Respond --> ReturnSuccess[Return success response]
-    ReturnSuccess --> Show[Show]
-    Show --> ShowSuccessMsg[Show success message]
-    ShowSuccessMsg --> Redirect[Redirect]
-    Redirect --> RedirectToListings[Redirect to My Listings]
-    RedirectToListings --> End([End])
-```
+![Post Listing Activity Diagram](images/post _listing_activity_diagram.png)
 
 This activity diagram shows the process of creating a new listing. It includes checking whether the user is logged in, filling and validating the form, sending the data to the backend, saving the listing, and showing a success response.
 
 #### User Registration with OTP Activity Diagram
 
-```mermaid
-flowchart TD
-    A([Start]) --> B[User enters signup information]
-    B --> C[Frontend sends registration request]
-    C --> D[Backend validates signup data]
-
-    D --> E{Is signup data valid?}
-    E -- No --> F[Return validation error]
-    F --> Z([End])
-
-    E -- Yes --> G[Backend generates OTP]
-    G --> H[Store OTP in otp_requests]
-    H --> I[Send OTP email to user]
-    I --> J[User enters received OTP]
-    J --> K[Frontend sends OTP verification request]
-    K --> L[Backend checks OTP validity and expiration]
-
-    L --> M{Is OTP valid?}
-    M -- No --> N[Return invalid or expired OTP error]
-    N --> J
-
-    M -- Yes --> O[Create user in users]
-    O --> P[Generate JWT token]
-    P --> Q[Return token and user data]
-    Q --> R[Frontend logs user in]
-    R --> Z([End])
-```
+![User Registration with OTP Activity Diagram](images/User_Registration_with_OTP_Activity_Diagram.png)
 
 This activity diagram shows the process of registering a new user account with email verification. It includes signup validation, OTP generation, email sending, OTP verification, and final account creation.
 
 ## Login Sequence Diagram
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant UI as Frontend UI
-    participant API as API Client
-    participant Route as Auth Route
-    participant Controller as Auth Controller
-    participant Service as Auth Service
-    participant DB as User Model / Database
-    participant Storage as localStorage
-
-    User->>UI: Enter email and password
-    UI->>UI: handleLogin()
-    UI->>API: RoommieAPI.login(email, password)
-    API->>Route: POST /api/auth/login
-    Route->>Controller: login(req, res)
-    Controller->>Service: login({ email, password })
-    Service->>DB: findByEmail(email)
-
-    alt User not found
-        DB-->>Service: null
-        Service-->>Controller: 401 Invalid email or password
-        Controller-->>Route: Error response
-        Route-->>API: 401 JSON error
-        API-->>UI: throw Error(...)
-        UI-->>User: Show error toast
-    else User found
-        DB-->>Service: user + hashed password
-        Service->>Service: Compare password with bcrypt
-
-        alt Password is incorrect
-            Service-->>Controller: 401 Invalid email or password
-            Controller-->>Route: Error response
-            Route-->>API: 401 JSON error
-            API-->>UI: throw Error(...)
-            UI-->>User: Show error toast
-        else Password is correct
-            Service->>Service: Generate JWT token
-            Service-->>Controller: { token, user }
-            Controller-->>Route: 200 Login successful
-            Route-->>API: { token, user }
-            API->>Storage: setToken(token)
-            API->>Storage: setUser(user)
-            API-->>UI: Success response
-            UI->>UI: close login modal
-            UI->>UI: completeAuthFlow(user, "login")
-            UI-->>User: Redirect to target page / browse page
-        end
-    end
-
-```
+![Login Sequence Diagram](images/login_sequence_diagram.jpeg)
 
 This sequence diagram shows the login flow of the Roommie website. The process starts when the user enters their email and password in the login modal and clicks the Log In button. The frontend handles this action through the login form and calls RoommieAPI.login(email, password) from the API client. Then, the API client sends a POST /api/auth/login request to the backend authentication route.
 
@@ -498,65 +180,7 @@ After a successful login, the API client stores the token and user data in local
 
 ## Post Listing Sequence Diagram
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant UI as Frontend UI
-    participant API as API Client
-    participant Auth as Auth Middleware
-    participant Upload as Upload Middleware
-    participant Controller as Listings Controller
-    participant Service as Listings Service
-    participant DB as Listing Model / Database
-
-    User->>UI: Fill listing form and click "Publish Listing"
-    UI->>UI: publishListing()
-
-    alt User is not logged in
-        UI-->>User: Show login modal
-    else User is logged in
-        UI->>UI: Validate required fields
-        UI->>UI: Normalize WhatsApp and map link
-        UI->>UI: Build FormData with listing data and images
-        UI->>API: RoommieAPI.createListing(formData)
-        API->>Auth: POST /api/listings with Bearer token
-
-        alt Token is missing or invalid
-            Auth-->>API: 401 Unauthorized
-            API-->>UI: throw Error(...)
-            UI-->>User: Show error toast
-        else Token is valid
-            Auth->>Upload: Continue request
-            Upload->>Upload: upload.array("images", 6)
-
-            alt Invalid file type or file too large
-                Upload-->>API: Upload error
-                API-->>UI: throw Error(...)
-                UI-->>User: Show error toast
-            else Files accepted
-                Upload->>Controller: createListing(req, res)
-                Controller->>Controller: Extract listing data and image URLs
-                Controller->>Service: createListing(userId, body, imageUrls)
-
-                alt Listing validation fails
-                    Service-->>Controller: 400 Validation error
-                    Controller-->>API: Error response
-                    API-->>UI: throw Error(...)
-                    UI-->>User: Show error toast
-                else Listing data is valid
-                    Service->>DB: createListing(...)
-                    DB-->>Service: Created listing row
-                    Service-->>Controller: Formatted listing
-                    Controller-->>API: 201 Listing created
-                    API-->>UI: Success response
-                    UI-->>User: Show "Listing published"
-                    UI->>UI: Redirect to /pages/space.html
-                end
-            end
-        end
-    end
-
-```
+![Post Listing Sequence Diagram](images/post_listing_sequence_diagram.jpeg)
 
 This sequence diagram shows how a logged-in Roommie user publishes a new room listing. The process starts when the user fills in the listing form with details such as title, room type, city, district, description, price, phone number, WhatsApp information, map location, amenities, roommate preferences, and room images. When the user clicks Publish Listing, the frontend runs publishListing().
 
@@ -570,45 +194,7 @@ The listings service validates the listing data. If the listing information is m
 
 ## Use-Case Diagram
 
-```mermaid
-usecaseDiagram
-  actor Guest
-  actor Student
-  actor Homeowner
-  actor WhatsAppSystem as "WhatsApp System"
-
-  Guest --> (Browse Listing)
-  Guest --> (Search & Filter Listing)
-  Guest --> (View Featured Listing)
-  Guest --> (Register Account)
-  Guest --> (Login)
-
-  Student --> (View Listing Details)
-  Student --> (Save Listing)
-  Student --> (Unsave Listing)
-  Student --> (View Saved Listings)
-  Student --> (Update Profile)
-  Student --> (Change Password)
-  Student --> (Request Password Reset)
-  Student --> (Reset Password)
-  Student --> (Request Email Change)
-  Student --> (Confirm Email Change)
-  Student --> (Delete Account)
-  Student --> (Contact Via WhatsApp)
-
-  Homeowner --> (Create Listing)
-  Homeowner --> (Update Listing)
-  Homeowner --> (Delete Listing)
-  Homeowner --> (View Listing Details)
-  Homeowner --> (Contact Via WhatsApp)
-
-  WhatsAppSystem --> (Contact Via WhatsApp)
-
-  (Request Password Reset) ..> (Send OTP) : include
-  (Request Email Change) ..> (Send OTP) : include
-  (Reset Password) ..> (Verify OTP) : include
-  (Confirm Email Change) ..> (Verify OTP) : include
-```
+![Use-Case Diagram](images/UseCase_Diagram.png)
 
 This use case diagram represents the Roommie platform and shows how users interact with the system. There are four main actors: **Guest**, **Student** (logged-in user), **Homeowner** (listing owner), and an external **WhatsApp System**. Each actor has different permissions based on their role.
 
@@ -648,89 +234,8 @@ The development architecture of the Roommie system follows a layered structure c
 
 ### Package Diagram
 
-```mermaid
-flowchart TB
-  subgraph Presentation_Layer["Presentation Layer"]
-    FP["frontend/pages"]
-    FS["frontend/scripts"]
-    FAPI["scripts/api"]
-    FAUTH["scripts/auth"]
-    FLAYOUT["scripts/layout"]
-    FLIST["scripts/listing"]
-    FPAGE["scripts/pages"]
-    FUSER["scripts/user"]
-    FSTY["frontend/styles"]
-    FSHARED["styles/shared"]
-    FHOME["styles/home"]
-    FLSTY["styles/listing"]
-    FUSTY["styles/user"]
-    FIMG["frontend/images"]
+![Package Diagram](images/package-diagram.png)
 
-    FP --> FS
-    FS --> FAPI
-    FS --> FAUTH
-    FS --> FLAYOUT
-    FS --> FLIST
-    FS --> FPAGE
-    FS --> FUSER
-    FSTY --> FSHARED
-    FSTY --> FHOME
-    FSTY --> FLSTY
-    FSTY --> FUSTY
-  end
-
-  subgraph Application_Layer["Application Layer"]
-    BR["backend/routes"]
-    BC["backend/controllers"]
-    BM["backend/middlewares"]
-  end
-
-  subgraph Business_Layer["Business Layer"]
-    BS["backend/services"]
-    BDL["backend/domains/listing"]
-    BU["backend/utils"]
-    BUP["backend/uploads"]
-  end
-
-  subgraph Data_Layer["Data Layer"]
-    BMO["backend/models"]
-    BCFG["backend/config"]
-    BDB["backend/database"]
-    BSCHEMA["database/schema"]
-    BREF["database/reference-data"]
-    BSETUP["database/setup"]
-  end
-
-  subgraph Support["Project Support"]
-    RS["scripts"]
-    RT["tests"]
-  end
-
-  FP --> BR
-  FS --> BR
-
-  BR --> BM
-  BR --> BC
-  BC --> BS
-
-  BS --> BDL
-  BS --> BU
-  BS --> BMO
-  BS --> BUP
-
-  BMO --> BU
-  BMO --> BCFG
-  BMO --> BDB
-
-  BDB --> BSCHEMA
-  BDB --> BREF
-  BDB --> BSETUP
-
-  RS --> BSETUP
-  RS --> BCFG
-  RT --> BS
-  RT --> BU
-```
 The Presentation Layer contains the frontend components responsible for user interaction, including pages, scripts, styles, and images. The scripts module handles client-side logic and communicates with the backend through API calls.
 
 The Application Layer includes routes, controllers, and middlewares. Routes define the system endpoints, middlewares handle request validation and authentication, and controllers coordinate incoming requests by invoking the appropriate business logic.
