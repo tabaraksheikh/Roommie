@@ -105,3 +105,15 @@ async function findUserListings(userId) {
   );
   return rows;
 }
+
+module.exports = {
+  findById,
+  findByIdWithPassword,
+  findByEmail,
+  createUser,
+  updateUser,
+  updateEmail,
+  updatePassword,
+  deleteUser,
+  findUserListings,
+};
