@@ -8,7 +8,7 @@
 | Roughaya Eldado | 220513681 | Roughaye-D |
 | Rayan Nouh Saed | 230513090 | Rayan-nh |
 | Najva Noor | 230513386 | najwanoor |
-| Rumeysa Elif Cikar | 230513303 | rumeysaelif |
+| Rumeysa Elif Çakır | 230513303 | rumeysaelif |
 
 ## Project Introduction
 
