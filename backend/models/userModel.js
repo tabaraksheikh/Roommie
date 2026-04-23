@@ -82,3 +82,26 @@ async function deleteUser(id) {
   const db = getDb();
   await db.query('DELETE FROM users WHERE id = ?', [id]);
 }
+
+/** Return a user's listings (lightweight – used in public profile) */
+async function findUserListings(userId) {
+  const db     = getDb();
+  const [rows] = await db.query(
+    `SELECT
+       l.id,
+       l.title,
+       l.type,
+       ${LISTING_LOCATION_SQL} AS location,
+       l.price,
+       ${LISTING_IMAGES_SQL} AS image_urls,
+       l.created_at
+     FROM listings l
+     LEFT JOIN cities c ON l.city_id = c.id
+     LEFT JOIN districts d ON l.district_id = d.id
+     ${LISTING_IMAGES_JOIN}
+     WHERE l.user_id = ?
+     ORDER BY l.created_at DESC`,
+    [userId]
+  );
+  return rows;
+}
