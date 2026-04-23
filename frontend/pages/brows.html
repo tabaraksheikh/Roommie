@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roommie - Browse Rooms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../styles/shared/common.css">
+    <link rel="stylesheet" href="../styles/listing/browse.css">
+</head>
+<body data-page="browse">
+
+<div id="app-header"></div>
+<div id="app-sidebar"></div>
+
+<main class="main" id="main-content">
+  <div class="page active" id="page-browse">
+    <div class="browse-wrap filters-collapsed" id="browse-wrap">
+      <div class="filter-backdrop" data-browse-action="close-filters"></div>
+
+      <aside class="filter-sidebar">
+        <div class="filter-sidebar-title">
+          <span>Filters</span>
+          <div class="filter-sidebar-actions">
+            <button id="reset-btn" type="button" data-browse-action="reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Room Type</div>
+          <div class="chips" id="type-chips">
+            <button class="chip active" type="button" data-browse-action="type" data-value="All">All</button>
+            <button class="chip" type="button" data-browse-action="type" data-value="Private">Private</button>
+            <button class="chip" type="button" data-browse-action="type" data-value="Shared">Shared</button>
+            <button class="chip" type="button" data-browse-action="type" data-value="Studio">Studio</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Location</div>
+          <select class="filter-select" id="city-filter">
+            <option value="All Cities">All Cities</option>
+          </select>
+          <select class="filter-select" id="district-filter" style="margin-top:10px">
+            <option value="All Districts">All Districts</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Maximum Rent</div>
+          <div class="price-range-wrap">
+            <div class="price-range-label"><span>TL 1</span><span>TL <span id="price-max-val">10.000</span></span></div>
+            <input id="price-filter" type="range" min="1" max="10000" step="1" value="10000"/>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Amenities</div>
+          <div class="chips" id="amenity-chips">
+            <button class="chip" type="button" data-browse-action="amenity" data-value="WiFi">WiFi</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Furnished">Furnished</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Laundry">Laundry</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Kitchen Access">Kitchen</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Private Bathroom">Private Bath</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Parking">Parking</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Air Conditioning">A/C</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Gym Access">Gym</button>
+            <button class="chip" type="button" data-browse-action="amenity" data-value="Balcony">Balcony</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Current Roommates</div>
+          <div class="chips" id="roommates-chips">
+            <button class="chip" type="button" data-browse-action="roommates" data-value="0">0</button>
+            <button class="chip" type="button" data-browse-action="roommates" data-value="1">1</button>
+            <button class="chip" type="button" data-browse-action="roommates" data-value="2">2</button>
+            <button class="chip" type="button" data-browse-action="roommates" data-value="3">3</button>
+            <button class="chip" type="button" data-browse-action="roommates" data-value="4">4+</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Preferred Gender</div>
+          <div class="chips" id="pref-gender-chips">
+            <button class="chip" type="button" data-browse-action="pref-gender" data-value="Any">Any</button>
+            <button class="chip" type="button" data-browse-action="pref-gender" data-value="Male">Male</button>
+            <button class="chip" type="button" data-browse-action="pref-gender" data-value="Female">Female</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Smoking</div>
+          <div class="chips" id="smoking-chips">
+            <button class="chip" type="button" data-browse-action="smoking" data-value="Non-smoker only">Non-smoker</button>
+            <button class="chip" type="button" data-browse-action="smoking" data-value="No preference">No preference</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Environment</div>
+          <div class="chips" id="env-chips">
+            <button class="chip" type="button" data-browse-action="env" data-value="Quiet environment">Quiet</button>
+            <button class="chip" type="button" data-browse-action="env" data-value="Social">Social</button>
+            <button class="chip" type="button" data-browse-action="env" data-value="Balanced">Balanced</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Pets</div>
+          <div class="chips" id="pets-chips">
+            <button class="chip" type="button" data-browse-action="pets" data-value="No pets">No pets</button>
+            <button class="chip" type="button" data-browse-action="pets" data-value="Allowed">Allowed</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="browse-main">
+        <div class="browse-topbar">
+          <button class="filter-toggle-btn" id="filter-toggle-btn" type="button" data-browse-action="toggle-filters" aria-expanded="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 4 21 4 14 12 14 19 10 21 10 12 3 4"/></svg>
+            Filters
+          </button>
+          <div class="search-wrap">
+            <input id="search-input" type="text" placeholder="Search by title, city, district, or keyword"/>
+            <button class="search-action" type="button" data-browse-action="search" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="active-filter-tags" id="active-filter-tags"></div>
+        <div id="browse-rooms"></div>
+        <div class="browse-pagination" id="browse-pagination"></div>
+      </div>
+    </div>
+
+    <div id="app-footer"></div>
+  </div>
+
+  <div class="page" id="page-detail">
+    <div class="detail-wrap">
+      <button class="back-btn" id="detail-back-btn" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <div class="detail-grid">
+        <div>
+          <div class="detail-img-placeholder" id="detail-img">Room</div>
+          <div class="detail-meta">
+            <span class="badge" id="detail-badge"></span>
+            <span class="detail-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="detail-location"></span>
+            </span>
+          </div>
+          <h1 class="detail-title" id="detail-title"></h1>
+          <p class="detail-desc" id="detail-desc"></p>
+          <div class="detail-section-title">Amenities</div>
+          <div class="amenity-tags" id="detail-amenities"></div>
+          <div class="detail-section-title">Roommate Preferences</div>
+          <div class="prefs-grid" id="detail-prefs"></div>
+        </div>
+        <div>
+          <div class="booking-card">
+            <div class="booking-price"><span id="detail-price"></span><span>/month</span></div>
+            <hr class="booking-divider" style="margin-top:16px"/>
+            <div id="detail-poster-card" class="poster-card">
+              <div class="poster-avatar" id="detail-poster-emoji">&#128100;</div>
+              <div><div class="poster-name" id="detail-poster-name"></div><div class="poster-sub" id="detail-poster-sub"></div></div>
+              <div class="poster-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+            <hr class="booking-divider"/>
+            <div class="contact-section-title">Contact Information</div>
+            <div class="contact-info-row"><button id="detail-phone" type="button" class="contact-phone-btn"></button></div>
+            <button class="btn-map" id="detail-map-btn" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>Open in Maps</button>
+            <button class="btn-wa" id="detail-wa-btn" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Chat on WhatsApp</button>
+            <button class="btn-save" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Save Listing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-poster">
+    <div class="poster-profile-wrap">
+      <button class="back-btn" id="poster-back-btn" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <div class="poster-profile-card">
+        <div class="poster-big-avatar" id="poster-big-emoji">&#128100;</div>
+        <div class="poster-profile-name" id="poster-big-name"></div>
+        <div class="poster-profile-sub" id="poster-big-sub"></div>
+        <div class="poster-tags" id="poster-big-tags"></div>
+        <div class="poster-bio" id="poster-big-bio"></div>
+      </div>
+      <div class="poster-listings-title">Listings</div>
+      <div id="poster-listings-grid"></div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="../scripts/api/api.js"></script>
+<script src="/reference-data/turkeyLocationsData.js"></script>
+  <script src="../scripts/listing/location-utils.js"></script>
+  <script src="../scripts/layout/layout.js"></script>
+  <script src="../scripts/layout/ui.js"></script>
+  <script src="../scripts/listing/listing-normalize.js"></script>
+  <script src="../scripts/listing/listing-card.js"></script>
+  <script src="../scripts/listing/listing-save.js"></script>
+  <script src="../scripts/listing/listing-poster.js"></script>
+  <script src="../scripts/listing/listing-detail.js"></script>
+  <script src="../scripts/auth/auth-modals.js"></script>
+  <script src="../scripts/auth/auth.js"></script>
+  <script src="../scripts/layout/init.js"></script>
+  <script src="../scripts/listing/browse.js"></script>
+</body>
+</html>
