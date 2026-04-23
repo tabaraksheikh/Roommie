@@ -64,3 +64,21 @@ async function updateUser(id, { firstName, lastName, gender, bio }) {
   );
   return findById(id);
 }
+
+async function updateEmail(id, email) {
+  const db = getDb();
+  await db.query('UPDATE users SET email = ? WHERE id = ?', [email, id]);
+  return findById(id);
+}
+
+/** Update only the hashed password */
+async function updatePassword(id, hashedPassword) {
+  const db = getDb();
+  await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, id]);
+}
+
+/** Hard-delete a user (cascades to listings + saved_rooms) */
+async function deleteUser(id) {
+  const db = getDb();
+  await db.query('DELETE FROM users WHERE id = ?', [id]);
+}
