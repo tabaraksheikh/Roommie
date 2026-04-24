@@ -90,25 +90,6 @@ async function getListingById(id) {
   return formatListingResponse(row);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async function createListing(userId, body, imageUrls) {
   try {
     const {
@@ -234,3 +215,12 @@ async function deleteListing(listingId, userId) {
   await listingModel.deleteListing(listingId);
   await deleteUploadFiles(imageUrls);
 }
+
+module.exports = {
+  getListings,
+  getFeatured,
+  getListingById,
+  createListing,
+  updateListing,
+  deleteListing,
+};
