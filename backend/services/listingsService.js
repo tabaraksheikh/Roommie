@@ -70,6 +70,25 @@ function normalizePhone(value) {
   return String(value || '').trim();
 }
 
+async function getListings(query) {
+  const page = parseInt(query.page || 1);
+  const limit = parseInt(query.limit || 50);
+  const offset = (page - 1) * limit;
+
+  const { rows, total } = await listingModel.findAll(query, limit, offset);
+  return { listings: rows.map(formatListingResponse), total, page, limit };
+}
+
+async function getFeatured() {
+  const rows = await listingModel.findFeatured();
+  return rows.map(formatListingResponse);
+}
+
+async function getListingById(id) {
+  const row = await listingModel.findById(id);
+  if (!row) throw new AppError('Listing not found', 404);
+  return formatListingResponse(row);
+}
 
 
 
