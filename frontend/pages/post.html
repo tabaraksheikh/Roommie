@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Roommie - Post a Room</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="../styles/shared/common.css">
+    <link rel="stylesheet" href="../styles/listing/post.css">
+</head>
+<body data-page="post" data-requires-auth="true">
+
+<div id="app-header"></div>
+<div id="app-sidebar"></div>
+
+<main class="main" id="main-content">
+  <div class="page active" id="page-post">
+    <div class="post-wrap">
+      <h1>Post a Room</h1>
+      <p class="page-sub">Share your available room with thousands of people.</p>
+
+      <div class="form-section">
+        <div class="form-section-title">Basic Information</div>
+
+        <div class="form-group">
+          <label class="form-label">Listing Title</label>
+          <div class="input-wrap">
+            <input class="form-input" type="text" placeholder="e.g. Sunny Private Room near Campus" id="post-title"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Room Type</label>
+          <div class="type-chips">
+            <span class="type-chip active" onclick="selectType(this)">Private</span>
+            <span class="type-chip" onclick="selectType(this)">Shared</span>
+            <span class="type-chip" onclick="selectType(this)">Studio</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <div class="input-wrap">
+            <select class="form-input no-icon" style="padding-left:42px" id="post-city">
+              <option value="">Select city...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">District</label>
+          <div class="input-wrap">
+            <select class="form-input no-icon" style="padding-left:42px" id="post-district" disabled>
+              <option value="">Select district...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input no-icon" placeholder="Describe the room, amenities, house rules..." id="post-desc"></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Amenities</div>
+        <div class="amenity-grid">
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">WiFi</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Furnished</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Laundry</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Kitchen Access</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Private Bathroom</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Parking</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Air Conditioning</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Gym Access</span>
+          <span class="amenity-chip" onclick="this.classList.toggle('active')">Balcony</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Photos</div>
+        <div class="upload-zone" id="post-upload-zone">
+          <div class="upload-zone-copy">
+            <strong>Add up to 6 photos</strong>
+            <span>Click or drag images here</span>
+          </div>
+        </div>
+        <div class="upload-previews" id="post-upload-previews"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Monthly Rent (TL)</div>
+        <div class="price-wrap">
+          <span class="price-symbol">TL </span>
+          <input class="form-input no-icon" style="padding-left:36px" type="text" inputmode="decimal" value="1.00" placeholder="1.00" id="post-price"/>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="prefs-card">
+          <div class="form-section-title" style="border:none;padding:0;margin-bottom:20px">Roommate Preferences</div>
+
+          <div class="pref-group">
+            <div class="filter-label">Current Number of Roommates</div>
+            <div class="radio-row">
+              <label class="radio-option"><input type="radio" name="roommates" value="0" checked/> None (solo)</label>
+              <label class="radio-option"><input type="radio" name="roommates" value="1"/> 1</label>
+              <label class="radio-option"><input type="radio" name="roommates" value="2"/> 2</label>
+              <label class="radio-option"><input type="radio" name="roommates" value="3"/> 3</label>
+              <label class="radio-option"><input type="radio" name="roommates" value="4"/> 4+</label>
+            </div>
+          </div>
+
+          <div class="pref-group">
+            <div class="filter-label">Preferred Gender</div>
+            <div class="radio-row">
+              <label class="radio-option"><input type="radio" name="gender" value="Any" checked/> Any</label>
+              <label class="radio-option"><input type="radio" name="gender" value="Male"/> Male</label>
+              <label class="radio-option"><input type="radio" name="gender" value="Female"/> Female</label>
+            </div>
+          </div>
+
+          <div class="pref-group">
+            <div class="filter-label">Smoking Policy</div>
+            <div class="radio-row">
+              <label class="radio-option"><input type="radio" name="smoke" value="Non-smoker only" checked/> Non-smoker only</label>
+              <label class="radio-option"><input type="radio" name="smoke" value="No preference"/> No preference</label>
+            </div>
+          </div>
+
+          <div class="pref-group">
+            <div class="filter-label">Living Environment</div>
+            <div class="radio-row">
+              <label class="radio-option"><input type="radio" name="env" value="Quiet environment" checked/> Quiet</label>
+              <label class="radio-option"><input type="radio" name="env" value="Social"/> Social</label>
+              <label class="radio-option"><input type="radio" name="env" value="Balanced"/> Balanced</label>
+            </div>
+          </div>
+
+          <div class="pref-group">
+            <div class="filter-label">Pets</div>
+            <div class="radio-row">
+              <label class="radio-option"><input type="radio" name="pets" value="No pets" checked/> No pets</label>
+              <label class="radio-option"><input type="radio" name="pets" value="Allowed"/> Allowed</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="contact-card">
+          <div class="form-section-title">Contact Information</div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div class="input-wrap">
+              <input class="form-input" type="tel" placeholder="+90 555 123 45 67" id="post-phone" required/>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">WhatsApp Link / Number</label>
+            <div class="input-wrap">
+              <input class="form-input" type="text" placeholder="https://wa.me/15551234567" id="post-wa" value="+90"/>
+            </div>
+            <div class="field-error" id="post-wa-error"></div>
+          </div>
+          <div class="form-group" style="margin-top:18px;margin-bottom:0">
+            <label class="form-label">Map Location</label>
+            <div class="input-wrap">
+              <input class="form-input" type="text" placeholder="https://maps.app.goo.gl/..." id="post-map-location"/>
+            </div>
+            <div class="field-error" id="post-map-location-error"></div>
+            <div class="field-help">Optional. Paste the Google Maps share link in `maps.app.goo.gl` format.</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-publish" onclick="publishListing()">Publish Listing</button>
+      <div id="post-preview" style="display:none"></div>
+    </div>
+
+    <div id="app-footer"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="../scripts/api/api.js"></script>
+<script src="/reference-data/turkeyLocationsData.js"></script>
+  <script src="../scripts/listing/location-utils.js"></script>
+  <script src="../scripts/layout/layout.js"></script>
+  <script src="../scripts/layout/ui.js"></script>
+  <script src="../scripts/listing/listing-normalize.js"></script>
+  <script src="../scripts/listing/listing-card.js"></script>
+  <script src="../scripts/listing/listing-save.js"></script>
+  <script src="../scripts/listing/listing-poster.js"></script>
+  <script src="../scripts/listing/listing-detail.js"></script>
+  <script src="../scripts/auth/auth-modals.js"></script>
+  <script src="../scripts/auth/auth.js"></script>
+  <script src="../scripts/layout/init.js"></script>
+  <script src="../scripts/pages/post.js"></script>
+</body>
+</html>
+
