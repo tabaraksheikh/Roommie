@@ -1,0 +1,9 @@
+/*
+  ROOMMIE - COMMON STYLES ENTRYPOINT
+  Shared styles are split by responsibility and imported here.
+*/
+
+@import url('./base.css');
+@import url('./layout.css');
+@import url('./components.css');
+@import url('./listings.css');

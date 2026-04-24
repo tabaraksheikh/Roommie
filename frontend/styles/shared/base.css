@@ -1,0 +1,34 @@
+/*
+  ROOMMIE - BASE SHARED STYLES
+*/
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:         #2a9d8f;
+  --teal-dark:    #21867a;
+  --teal-light:   #e8f5f3;
+  --dark:         #1a1a2e;
+  --mid:          #555e6d;
+  --light:        #8a93a0;
+  --border:       #e8eaed;
+  --bg:           #f7f8fa;
+  --white:        #ffffff;
+  --radius:       16px;
+  --card-shadow:  0 2px 16px rgba(0,0,0,.07);
+  --orange:       #e76f51;
+  --sidebar-w:    240px;
+  --header-h:     56px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
