@@ -167,7 +167,8 @@
   color: var(--dark); background: white;
   outline: none;
   transition: border-color .15s, box-shadow .15s;
-  -webkit-appearance: none;
+  appearance: none;
+-webkit-appearance: none;
 }
 .form-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,157,143,.1); }
 .form-input.no-icon { padding-left: 14px; }
