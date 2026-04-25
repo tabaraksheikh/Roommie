@@ -1,4 +1,4 @@
-const amenityCatalog = require('../reference-data/amenityCatalog');
+const amenityCatalog = require('../reference-data/aminityCatalog');
 const { loadLocations } = require('../reference-data/locationCatalog');
 const { slugifyAmenity } = require('../../domains/listing/listingStorage');
 
