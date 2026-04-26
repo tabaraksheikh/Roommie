@@ -1,5 +1,8 @@
 # Roommie – Housing Finder Platform
 
+**GitHub Repository:** https://github.com/tabaraksheikh/Roommie
+**youtube Video:** https://www.youtube.com/watch?v=olpCTGJBABA
+
 ## Team Details
 
 | Name | Student ID | GitHub Username |
